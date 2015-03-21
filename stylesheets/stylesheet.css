@@ -79,6 +79,8 @@ h2 {
 
 h3 {
   font-size: 24px;
+  border-bottom: 1px solid;
+  padding-top: 10px;
 }
 
 h4 {
@@ -361,7 +363,7 @@ Full-Width Styles
 }
 
 #main_content {
-  padding-top: 40px;
+  padding-top: 10px;
 }
 
 #footer_wrap {
@@ -371,6 +373,7 @@ Full-Width Styles
 .smalllogo {
     width: 32px;
     height: 32px;
+    margin-left: -36px;
 }
 
 /*******************************************************************************
