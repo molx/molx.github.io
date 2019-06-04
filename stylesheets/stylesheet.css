@@ -289,6 +289,16 @@ Full-Width Styles
   border-bottom-right-radius: 2px;
 }
 
+#langbar {
+  display: block;
+  position: absolute;
+  top:0;
+  left: 10px;
+  z-index: 10;
+  padding: 0px 10px;
+  color: #fff;      
+}
+
 #header_wrap {
   background: #212121;
   background: -moz-linear-gradient(top, #373737, #212121);
