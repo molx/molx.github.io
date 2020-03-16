@@ -31,22 +31,26 @@
 			
 		<h3 id="sumario">Gráficos</h3>
 		<ol>
-			<li><a href="#BR">Brasil</li>
-			<li><a href="#SP">São Paulo</li>
-			<li><a href="#RJ">Rio de Janeiro</li>
-			<li><a href="#ES">Espírito Santo</li>
-			<li><a href="#BA">Bahia</li>
-			<li><a href="#DF">Distrito Federal</li>
-			<li><a href="#AL">Alagoas</li>
-			<li><a href="#MG">Minas Gerais</li>
-			<li><a href="#RS">Rio Grande do Sul</li>
-			<li><a href="#PR">Paraná</li>
-			<li><a href="#PE">Pernambuco</li>
-            <li><a href="#GO">Goiás</li>
-            <li><a href="#SC">Santa Catarina</li>
-            <li><a href="#RN">Rio Grande do Norte</li>
-            <li><a href="#AM">Amazonas</li>
-            <li><a href="#SE">Sergipe</li>
+			<li><a href="#BR">Brasil</a></li>
+            <ul>
+                <li><a href="#dist">Distribuição dos casos por estado</a></li>
+                <li><a href="#comp">Comparação com outros países</a></li>
+            </ul>
+			<li><a href="#SP">São Paulo</a></li>
+			<li><a href="#RJ">Rio de Janeiro</a></li>
+			<li><a href="#ES">Espírito Santo</a></li>
+			<li><a href="#BA">Bahia</a></li>
+			<li><a href="#DF">Distrito Federal</a></li>
+			<li><a href="#AL">Alagoas</a></li>
+			<li><a href="#MG">Minas Gerais</a></li>
+			<li><a href="#RS">Rio Grande do Sul</a></li>
+			<li><a href="#PR">Paraná</a></li>
+			<li><a href="#PE">Pernambuco</a></li>
+            <li><a href="#GO">Goiás</a></li>
+            <li><a href="#SC">Santa Catarina</a></li>
+            <li><a href="#RN">Rio Grande do Norte</a></li>
+            <li><a href="#AM">Amazonas</a></li>
+            <li><a href="#SE">Sergipe</a></li>
 		</ol>
 		
 		<h4 id="BR">Brasil</h4>
@@ -54,7 +58,12 @@
 		
 		<img class="plot" src="images/Brasil-Total.png">
 		<img class="plot" src="images/Brasil-Novos.png">
-		
+        
+        <img id ="dist" class="plot" src="images/Distribuição.png">        
+		<img id = "comp" class="plot" src="images/Comparação - Linear.png">
+        <img class="plot" src="images/Comparação - Log.png">
+        <p><small>Esses dados possuem um atraso de 1 dia pois dependem da atualização da OMS dos dados publicados pelo Ministério da Saúde.</small></p>
+        
 		<h4 id="SP">São Paulo</h4>
 		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
 		<img class="plot" src="images/São Paulo-Total.png">
