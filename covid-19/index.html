@@ -24,11 +24,11 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>Fonte dos dados</h3>
-            <p>Os dados utilizados para criação dos gráficos com informações por estado foram retirados do site do Ministério da Saúde:</p>
+        <h3>Fontes dos dados</h3>
+            <p>Os dados referentes ao Brasil são retirados do site do Ministério da Saúde:</p>
 			<p><a href="http://plataforma.saude.gov.br/novocoronavirus/">http://plataforma.saude.gov.br/novocoronavirus/</a></p>
 			
-			<p>Os dados utilizados para a comparação com outros países foram retirados do projeto Our World in Data, da Universidade de Oxford:</p>
+			<p>Os dados referentes a outros países são retirados do projeto Our World in Data, da Universidade de Oxford:</p>
 			<p><a href="https://ourworldindata.org/coronavirus-source-data">https://ourworldindata.org/coronavirus-source-data</a></p>
 			
 		<h3 id="sumario">Gráficos</h3>
@@ -37,6 +37,7 @@
             <ul>
                 <li><a href="#dist">Distribuição dos casos por estado</a></li>
                 <li><a href="#comp">Comparação com outros países</a></li>
+                <li><a href="#mortes">Mortes</a></li>
             </ul>
 			<li><a href="#SP">São Paulo</a></li>
 			<li><a href="#RJ">Rio de Janeiro</a></li>
@@ -67,6 +68,10 @@
 		<img id = "comp" class="plot" src="images/Comparação - Linear.png">
         <img class="plot" src="images/Comparação - Log.png">
         <img class="plot" src="images/Comparação - Log Full.png">
+        
+        <img id = "mortes" class="plot" src="images/Mortalidade.png">
+        <p style="font-size:small;">A taxa de mortalidade média foi calculada pela média da taxa dos países que registraram ao menos 20 mortes.</p>
+        <p style="font-size:small;">Os valores da taxa de mortalidade dependem da eficiência da confirmação de casos. É possível que, em países em situação mais grave, essa taxa seja superestimada pela diminuição do registro (mas não da ocorrência) de casos leves.</p>
         
 		<h4 id="SP">São Paulo</h4>
 		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
