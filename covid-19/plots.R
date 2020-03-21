@@ -37,12 +37,12 @@ calc_new <- function(x) {
   new
 }
 
-estados <- read_excel("Brasil.xlsx", sheet = "Confirmados") %>%
+estados <- read_excel("data/Brasil.xlsx", sheet = "Confirmados") %>%
   mutate(Data = as.Date(Data))
 
 write_excel_csv(estados, path = "data/casosconfirmados.csv")
 
-mortes <- read_excel("Brasil.xlsx", sheet = "Mortes") %>%
+mortes <- read_excel("data/Brasil.xlsx", sheet = "Mortes") %>%
   mutate(Data = as.Date(Data))
 
 write_excel_csv(mortes, path = "data/mortes.csv")
@@ -115,7 +115,7 @@ distplot <- tail(estados, 1) %>% select(-Brasil, -Data) %>%
     grob = textGrob(label = "www.alanmol.com.br/covid-19", 
                     hjust = 1, gp = gpar(cex = 0.8), vjust = 0.5),
     xmin = ncol(estados) - 2,
-    ymax = -(1.1 * max(estados$`São Paulo`))) +
+    ymax = -(0.9 * max(estados$`São Paulo`))) +
   coord_cartesian(clip = "off")
 
 distplot
@@ -128,7 +128,7 @@ ggsave(paste0("data/Distribuição.png"), plot = distplot,
        dpi = 100)
 dev.off()
 
-pop <- read_excel("Brasil.xlsx", sheet = "Populacao")
+pop <- read_excel("data/Brasil.xlsx", sheet = "Populacao")
 
 pop_vec <- pop$População %>% setNames(pop$UF)
 pop_vec["Brasil"] <- sum(pop_vec)
@@ -234,7 +234,7 @@ log_plot <- ggplot(log_data, aes(day, total_cases)) + full_data_style +
     grob = textGrob(label = "www.alanmol.com.br/covid-19", 
                     hjust = 0.5, gp = gpar(cex = 0.8), vjust = 1),
     xmin = maxday,
-    ymax = (0.65 * diff(range(log_data$total_cases)))) +
+    ymax = (0.8 * diff(range(log_data$total_cases)))) +
   coord_cartesian(clip = "off")
 
 log_plot
@@ -256,14 +256,14 @@ comp_data <- full_data %>% filter(location %in% compare) %>%
 comp_plot <- ggplot(comp_data, aes(day, total_cases)) + full_data_style +
   labs(y = "Número de Casos (log10)") +
   scale_y_continuous(breaks = 1:4, minor_breaks = NULL, labels = pot10) +
-  annotate("text", x = 1, y = max(log_data$total_cases), 
+  annotate("text", x = 1, y = max(comp_data$total_cases), 
            label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde do Brasil",
            hjust = 0, vjust = 0.5) +
   annotation_custom(
     grob = textGrob(label = "www.alanmol.com.br/covid-19", 
                     hjust = 0.5, gp = gpar(cex = 0.8), vjust = 1),
-    xmin = maxday,
-    ymax = (0.65 * diff(range(log_data$total_cases)))) +
+    xmin = 30,
+    ymax = (0.75 * diff(range(log_data$total_cases)))) +
   coord_cartesian(clip = "off")
 
 comp_plot
@@ -276,7 +276,7 @@ death_plot <- tail(mortes, 1) %>% select(-Brasil, -Data) %>%
   ggplot(aes(x = reorder(Estado, -Casos), y = Casos)) + geom_bar(stat = "identity") +
   geom_text(aes(label = Casos), position = position_dodge(width = 0.9), 
             vjust = -0.2, size = 3) +
-  theme_light() + labs(x = "Estado") + ggtitle("Distribuição dos casos") +
+  theme_light() + labs(x = "Estado", y = "Óbitos") + ggtitle("Distribuição dos óbitos") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   theme(plot.title = element_text(hjust = 0.5)) +
   annotate("text", x = ncol(estados) - 2, y = max(estados$`São Paulo`), 
@@ -319,7 +319,7 @@ death_comp_plot <- death_comp %>%
     grob = textGrob(label = "www.alanmol.com.br/covid-19", 
                     hjust = 1, gp = gpar(cex = 0.8), vjust = 0.5),
     xmin = nrow(death_comp) - 1,
-    ymax = -0.075) +
+    ymax = -0.065) +
   coord_cartesian(clip = "off") 
 
 death_comp_plot
