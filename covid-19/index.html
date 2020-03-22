@@ -1,232 +1,271 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
+<head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="description" content="COVID-19 no Brasil">
-    <link href='favicon.ico' rel='icon' type='image/x-icon'/>
+    <link href='favicon.ico' rel='icon' type='image/x-icon' />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
     <title>COVID-19 no Brasil</title>
-  </head>
+</head>
 
-  <body>
-  
+<body>
+
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
         <header class="inner">
             <a id="forkme_banner" href="https://github.com/molx/molx.github.io/tree/master/covid-19">Ver no GitHub</a>
-        
+
             <h1 id="project_title">COVID-19 no Brasil</h1>
         </header>
     </div>
 
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>Fontes dos dados</h3>
+        <section id="main_content" class="inner">
+            <h3>Fontes dos dados</h3>
             <p>Os dados referentes ao Brasil são retirados do site do Ministério da Saúde:</p>
-			<p><a href="http://plataforma.saude.gov.br/novocoronavirus/">http://plataforma.saude.gov.br/novocoronavirus/</a></p>
-            
+            <p><a href="http://plataforma.saude.gov.br/novocoronavirus/">http://plataforma.saude.gov.br/novocoronavirus/</a></p>
+
             <p>Como o MS só disponibiliza os dados do último dia, os dados completos (séries temporais) podem ser obtidos aqui:</p>
-            <p><a href="data/estados.csv">http://www.alanmol.com.br/covid-19/data/estados.csv</a><br/>            
-			
-			<p>Os dados referentes a outros países são retirados do projeto Our World in Data, da Universidade de Oxford:</p>
-			<p><a href="https://ourworldindata.org/coronavirus-source-data">https://ourworldindata.org/coronavirus-source-data</a></p>
-			
-            <p>Última atualização dos dados: 20/03/2020</p>
-            
-           <h3>Outras referências</h3>
-           <p>Diversos grupos estão compilando seus próprios dados e criando diferentes visualizações referente ao Coronavirus. Alguns destes são listados abaixo:</p>
-           <ul>
-               <li><a href="https://covid19br.github.io/index.html">Observatório COVID-19 BR</a></li>
-               <li><a href="https://paternogbc.github.io/covid19br/index.html">Pacote de R com os dados do Brasil (covid19br)</a></li>
-               <li><a href="https://liibre.github.io/coronabr/index.html">Pacote de R com os dados do Brasil e gráficos (coronabr)</a></li>
-               <li><a href="https://www.kaggle.com/unanimad/corona-virus-brazil">Repositório Kaggle com dados do Brasil por estado</a><br/>
-               <span style="font-size: small;">Os dados podem diferir um pouco dos apresentados aqui por diferenças nas referências (Secretarias Estaduais vs Ministério da Saúde)</span></li>
-           </ul>
-            
-		<h3 id="sumario">Gráficos</h3>
-		<ol>
-			<li><a href="#BR">Brasil</a></li>
-            <ul>
-                <li><a href="#dist">Comparação entre Unidades da Federação</a></li>
-                <li><a href="#comp">Comparação com outros países</a></li>
-                <li><a href="#obitos">Óbitos</a></li>
-            </ul>
-			<li><a href="#SP">São Paulo</a></li>
-			<li><a href="#RJ">Rio de Janeiro</a></li>
-			<li><a href="#ES">Espírito Santo</a></li>
-			<li><a href="#BA">Bahia</a></li>
-			<li><a href="#DF">Distrito Federal</a></li>
-			<li><a href="#AL">Alagoas</a></li>
-			<li><a href="#MG">Minas Gerais</a></li>
-			<li><a href="#RS">Rio Grande do Sul</a></li>
-			<li><a href="#PR">Paraná</a></li>
-			<li><a href="#PE">Pernambuco</a></li>
-            <li><a href="#GO">Goiás</a></li>
-            <li><a href="#SC">Santa Catarina</a></li>
-            <li><a href="#RN">Rio Grande do Norte</a></li>
-            <li><a href="#AM">Amazonas</a></li>
-            <li><a href="#SE">Sergipe</a></li>
-			<li><a href="#MS">Mato Grosso do Sul</a></li>
-			<li><a href="#CE">Ceará</a></li>
-            <li><a href="#AC">Acre</a></li>
-            <li><a href="#PA">Pará</a></li>
-            <li><a href="#PB">Paraíba</a></li>
-            <li><a href="#TO">Tocantins</a></li>
-		</ol>
-		
-		<h4 id="BR">Brasil</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		
-		<img class="plot" src="data/Brasil-Total.png">
-		<img class="plot" src="data/Brasil-Novos.png">
-        
-        <h5>Comparação entre Unidades da Federação</h5>
-        <img id ="dist" class="plot" src="data/Distribuição.png">        
-        <img id ="dist" class="plot" src="data/Casos por Habitantes.png">
-        <div class="flourish-embed flourish-bar-chart-race" data-src="visualisation/1647303"><script src="https://public.flourish.studio/resources/embed.js"></script></div>
-        
-        <h5 id = "comp" >Comparação com outros países</h5>
-        <p>Os dados de comparação com outros países possuem um "atraso" de um dia. Isso porque os dados são compilados pelo Our World in Data até as 14h (horário de Brasília, GMT -3), quando os dados oficiais mais recentes do Brasil normalmente são os do dia anterior.</p>
-        
-		<img class="plot" src="data/Comparação - Linear.png">
-        <img class="plot" src="data/Comparação - Log.png">
-        <img class="plot" src="data/Comparação - Log Full.png">
-        
-        <h5 id="obitos">Óbitos</h5>
-        <img class="plot" src="data/Letalidade.png">
-        <p style="font-size:small;">A letalidade média foi calculada pela média da taxa dos países que registraram ao menos 20 mortes.</p>
-        <p style="font-size:small;">Os valores da letalidade dependem da eficiência da confirmação de casos. É possível que, em países em situação mais grave, essa taxa seja superestimada pela diminuição do registro (mas não da ocorrência) de casos leves.</p>
-        
-		<h4 id="SP">São Paulo</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/São Paulo-Total.png">
-		<img class="plot" src="data/São Paulo-Novos.png">
-		
-		<h4 id="RJ">Rio de Janeiro</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Rio de Janeiro-Total.png">
-		<img class="plot" src="data/Rio de Janeiro-Novos.png">
-		
-		<h4 id="ES">Espírito Santo</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Espírito Santo-Total.png">
-		<img class="plot" src="data/Espírito Santo-Novos.png">
-		
-		<h4 id="BA">Bahia</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Bahia-Total.png">
-		<img class="plot" src="data/Bahia-Novos.png">
-		
-		<h4 id="DF">Distrito Federal</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Distrito Federal-Total.png">
-		<img class="plot" src="data/Distrito Federal-Novos.png">
-		
-		<h4 id="AL">Alagoas</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Alagoas-Total.png">
-		<img class="plot" src="data/Alagoas-Novos.png">
-		
-		<h4 id="MG">Minas Gerais</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Minas Gerais-Total.png">
-		<img class="plot" src="data/Minas Gerais-Novos.png">
-		
-		<h4 id="RS">Rio Grande do Sul</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Rio Grande do Sul-Total.png">
-		<img class="plot" src="data/Rio Grande do Sul-Novos.png">
-		
-		<h4 id="PR">Paraná</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Paraná-Total.png">
-		<img class="plot" src="data/Paraná-Novos.png">
-		
-		<h4 id="PE">Pernambuco</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Pernambuco-Total.png">
-		<img class="plot" src="data/Pernambuco-Novos.png">
-        
-        <h4 id="GO">Goiás</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Goiás-Total.png">
-		<img class="plot" src="data/Goiás-Novos.png">
-        
-        <h4 id="SC">Santa Catarina</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Santa Catarina-Total.png">
-		<img class="plot" src="data/Santa Catarina-Novos.png">
-        
-        <h4 id="RN">Rio Grande do Norte</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Rio Grande do Norte-Total.png">
-		<img class="plot" src="data/Rio Grande do Norte-Novos.png">
-        
-        <h4 id="AM">Amazonas</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Amazonas-Total.png">
-		<img class="plot" src="data/Amazonas-Novos.png">
-        
-        <h4 id="SE">Sergipe</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Sergipe-Total.png">
-		<img class="plot" src="data/Sergipe-Novos.png">
-		
-		<h4 id="MS">Mato Grosso do Sul</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Mato Grosso do Sul-Total.png">
-		<img class="plot" src="data/Mato Grosso do Sul-Novos.png">
-		
-		<h4 id="CE">Ceará</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Ceará-Total.png">
-		<img class="plot" src="data/Ceará-Novos.png">
-        
-		<h4 id="AC">Acre</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Acre-Total.png">
-		<img class="plot" src="data/Acre-Novos.png">
-        
-		<h4 id="PA">Pará</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Pará-Total.png">
-		<img class="plot" src="data/Pará-Novos.png">
-        
-		<h4 id="PB">Paraíba</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Paraíba-Total.png">
-		<img class="plot" src="data/Paraíba-Novos.png">
-        
-		<h4 id="TO">Tocantins</h4>
-		<a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
-		<img class="plot" src="data/Tocantins-Total.png">
-		<img class="plot" src="data/Tocantins-Novos.png">
-      </section>
-      
+            <p><a href="data/estados.csv">http://www.alanmol.com.br/covid-19/data/estados.csv</a>
+                <br/>
+
+                <p>Os dados referentes a outros países são retirados do projeto Our World in Data, da Universidade de Oxford:</p>
+                <p><a href="https://ourworldindata.org/coronavirus-source-data">https://ourworldindata.org/coronavirus-source-data</a></p>
+
+                <p>Última atualização dos dados: 20/03/2020</p>
+
+                <h3>Outras referências</h3>
+                <p>Diversos grupos estão compilando seus próprios dados e criando diferentes visualizações referente ao Coronavirus. Alguns destes são listados abaixo:</p>
+                <ul>
+                    <li><a href="https://covid19br.github.io/index.html">Observatório COVID-19 BR</a></li>
+                    <li><a href="https://paternogbc.github.io/covid19br/index.html">Pacote de R com os dados do Brasil (covid19br)</a></li>
+                    <li><a href="https://liibre.github.io/coronabr/index.html">Pacote de R com os dados do Brasil e gráficos (coronabr)</a></li>
+                    <li><a href="https://www.kaggle.com/unanimad/corona-virus-brazil">Repositório Kaggle com dados do Brasil por estado</a>
+                        <br/>
+                        <span style="font-size: small;">Os dados podem diferir um pouco dos apresentados aqui por diferenças nas referências (Secretarias Estaduais vs Ministério da Saúde)</span></li>
+                </ul>
+
+                <h3 id="sumario">Gráficos</h3>
+                <ol>
+                    <li><a href="#BR">Brasil</a></li>
+                    <ul>
+                        <li><a href="#dist">Comparação entre Unidades da Federação</a></li>
+                        <li><a href="#comp">Comparação com outros países</a></li>
+                        <li><a href="#obitos">Óbitos</a></li>
+                    </ul>
+                    <li><a href="#SP">São Paulo</a></li>
+                    <li><a href="#RJ">Rio de Janeiro</a></li>
+                    <li><a href="#ES">Espírito Santo</a></li>
+                    <li><a href="#BA">Bahia</a></li>
+                    <li><a href="#DF">Distrito Federal</a></li>
+                    <li><a href="#AL">Alagoas</a></li>
+                    <li><a href="#MG">Minas Gerais</a></li>
+                    <li><a href="#RS">Rio Grande do Sul</a></li>
+                    <li><a href="#PR">Paraná</a></li>
+                    <li><a href="#PE">Pernambuco</a></li>
+                    <li><a href="#GO">Goiás</a></li>
+                    <li><a href="#SC">Santa Catarina</a></li>
+                    <li><a href="#RN">Rio Grande do Norte</a></li>
+                    <li><a href="#AM">Amazonas</a></li>
+                    <li><a href="#SE">Sergipe</a></li>
+                    <li><a href="#MS">Mato Grosso do Sul</a></li>
+                    <li><a href="#CE">Ceará</a></li>
+                    <li><a href="#AC">Acre</a></li>
+                    <li><a href="#PA">Pará</a></li>
+                    <li><a href="#PB">Paraíba</a></li>
+                    <li><a href="#TO">Tocantins</a></li>
+                    <li><a href="#MT">Mato Grosso</a></li>
+                    <li><a href="#AP">Amapá</a></li>
+                    <li><a href="#RO">Rondônia</a></li>
+                    <li><a href="#PI">Piauí</a></li>
+                    <li><a href="#MA">Maranhão</a></li>
+                    <li><a href="#RR">Roraima</a></li>
+                </ol>
+
+                <h4 id="BR">Brasil</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+
+                <img class="plot" src="data/Brasil-Total.png">
+                <img class="plot" src="data/Brasil-Novos.png">
+
+                <h5>Comparação entre Unidades da Federação</h5>
+                <img id="dist" class="plot" src="data/Distribuição.png">
+                <img id="dist" class="plot" src="data/Casos por Habitantes.png">
+                <div class="flourish-embed flourish-bar-chart-race" data-src="visualisation/1647303">
+                    <script src="https://public.flourish.studio/resources/embed.js"></script>
+                </div>
+
+                <h5 id="comp">Comparação com outros países</h5>
+                <p>Os dados de comparação com outros países possuem um "atraso" de um dia. Isso porque os dados são compilados pelo Our World in Data até as 14h (horário de Brasília, GMT -3), quando os dados oficiais mais recentes do Brasil normalmente são os do dia anterior.</p>
+
+                <img class="plot" src="data/Comparação - Linear.png">
+                <img class="plot" src="data/Comparação - Log.png">
+                <img class="plot" src="data/Comparação - Log Full.png">
+
+                <h5 id="obitos">Óbitos</h5>
+                <img class="plot" src="data/Letalidade.png">
+                <p style="font-size:small;">A letalidade média foi calculada pela média da taxa dos países que registraram ao menos 20 mortes.</p>
+                <p style="font-size:small;">Os valores da letalidade dependem da eficiência da confirmação de casos. É possível que, em países em situação mais grave, essa taxa seja superestimada pela diminuição do registro (mas não da ocorrência) de casos leves.</p>
+
+                <h4 id="SP">São Paulo</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/São Paulo-Total.png">
+                <img class="plot" src="data/São Paulo-Novos.png">
+
+                <h4 id="RJ">Rio de Janeiro</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Rio de Janeiro-Total.png">
+                <img class="plot" src="data/Rio de Janeiro-Novos.png">
+
+                <h4 id="ES">Espírito Santo</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Espírito Santo-Total.png">
+                <img class="plot" src="data/Espírito Santo-Novos.png">
+
+                <h4 id="BA">Bahia</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Bahia-Total.png">
+                <img class="plot" src="data/Bahia-Novos.png">
+
+                <h4 id="DF">Distrito Federal</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Distrito Federal-Total.png">
+                <img class="plot" src="data/Distrito Federal-Novos.png">
+
+                <h4 id="AL">Alagoas</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Alagoas-Total.png">
+                <img class="plot" src="data/Alagoas-Novos.png">
+
+                <h4 id="MG">Minas Gerais</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Minas Gerais-Total.png">
+                <img class="plot" src="data/Minas Gerais-Novos.png">
+
+                <h4 id="RS">Rio Grande do Sul</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Rio Grande do Sul-Total.png">
+                <img class="plot" src="data/Rio Grande do Sul-Novos.png">
+
+                <h4 id="PR">Paraná</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Paraná-Total.png">
+                <img class="plot" src="data/Paraná-Novos.png">
+
+                <h4 id="PE">Pernambuco</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Pernambuco-Total.png">
+                <img class="plot" src="data/Pernambuco-Novos.png">
+
+                <h4 id="GO">Goiás</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Goiás-Total.png">
+                <img class="plot" src="data/Goiás-Novos.png">
+
+                <h4 id="SC">Santa Catarina</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Santa Catarina-Total.png">
+                <img class="plot" src="data/Santa Catarina-Novos.png">
+
+                <h4 id="RN">Rio Grande do Norte</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Rio Grande do Norte-Total.png">
+                <img class="plot" src="data/Rio Grande do Norte-Novos.png">
+
+                <h4 id="AM">Amazonas</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Amazonas-Total.png">
+                <img class="plot" src="data/Amazonas-Novos.png">
+
+                <h4 id="SE">Sergipe</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Sergipe-Total.png">
+                <img class="plot" src="data/Sergipe-Novos.png">
+
+                <h4 id="MS">Mato Grosso do Sul</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Mato Grosso do Sul-Total.png">
+                <img class="plot" src="data/Mato Grosso do Sul-Novos.png">
+
+                <h4 id="CE">Ceará</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Ceará-Total.png">
+                <img class="plot" src="data/Ceará-Novos.png">
+
+                <h4 id="AC">Acre</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Acre-Total.png">
+                <img class="plot" src="data/Acre-Novos.png">
+
+                <h4 id="PA">Pará</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Pará-Total.png">
+                <img class="plot" src="data/Pará-Novos.png">
+
+                <h4 id="PB">Paraíba</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Paraíba-Total.png">
+                <img class="plot" src="data/Paraíba-Novos.png">
+
+                <h4 id="TO">Tocantins</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Tocantins-Total.png">
+                <img class="plot" src="data/Tocantins-Novos.png">
+
+                <h4 id="MT">Mato Grosso</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Mato Grosso-Total.png">
+                <img class="plot" src="data/Mato Grosso-Novos.png">
+
+                <h4 id="AP">Amapá</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Amapá-Total.png">
+                <img class="plot" src="data/Amapá-Novos.png">
+
+                <h4 id="RO">Rondônia</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Rondônia-Total.png">
+                <img class="plot" src="data/Rondônia-Novos.png">
+
+                <h4 id="PI">Piauí</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Piauí-Total.png">
+                <img class="plot" src="data/Piauí-Novos.png">
+
+                <h4 id="MA">Maranhão</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Maranhão-Total.png">
+                <img class="plot" src="data/Maranhão-Novos.png">
+
+                <h4 id="RR">Roraima</h4>
+                <a href="#sumario" class="voltar_topo">Voltar ao sumário</a>
+                <img class="plot" src="data/Roraima-Total.png">
+                <img class="plot" src="data/Roraima-Novos.png">
+        </section>
     </div>
 
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
-      <footer class="inner">        
-      </footer>
+        <footer class="inner">
+        </footer>
     </div>
 
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-60942909-1");
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+        try {
+            var pageTracker = _gat._getTracker("UA-60942909-1");
             pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
+        } catch (err) {}
+    </script>
 
+</body>
 
-  </body>
 </html>
