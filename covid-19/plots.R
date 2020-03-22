@@ -2,6 +2,7 @@ library(readr)
 library(readxl)
 library(dplyr)
 library(tidyr)
+library(tibble)
 library(ggplot2)
 library(grid)
 library(ggrepel)
@@ -20,7 +21,7 @@ library(ggrepel)
 #   mutate(Date = as.Date(Date, format = "%m/%d/%y"), New = Cases - lag(Cases)) %>%
 #   tail(-29)
 
-datatyle <- list(theme_light(), geom_line(size = 1), 
+datastyle <- list(theme_light(), geom_line(size = 1), 
                   scale_x_date(date_breaks = "1 day", date_minor_breaks = "1 day",
                                date_labels = "%d/%m"),
                   theme(axis.text.x = element_text(angle = 45, hjust = 1)),
@@ -37,53 +38,48 @@ calc_new <- function(x) {
   new
 }
 
-estados <- read_excel("data/Brasil.xlsx", sheet = "Confirmados") %>%
-  mutate(Data = as.Date(Data))
-
-write_excel_csv(estados, path = "data/casosconfirmados.csv")
+casos <- read_excel("data/Brasil.xlsx", sheet = "Confirmados") %>%
+  mutate(Data = as.Date(Data)) %>% rename(date = Data) %>%
+  pivot_longer(-date, names_to = "location", values_to = "total_cases") 
 
 mortes <- read_excel("data/Brasil.xlsx", sheet = "Mortes") %>%
-  mutate(Data = as.Date(Data))
+  mutate(Data = as.Date(Data)) %>% rename(date = Data) %>%
+  pivot_longer(-date, names_to = "location", values_to = "total_deaths")
 
-write_excel_csv(mortes, path = "data/mortes.csv")
+estados <- full_join(casos, mortes) %>% group_by(location) %>%
+  mutate(new_cases = calc_new(total_cases),
+         new_deaths = calc_new(total_deaths))
 
-estados_new <- estados %>%
-  mutate_if(is.numeric, calc_new)
+estados %>% filter(location == "São Paulo") %>% tail
 
-ufs <- colnames(estados)[-1]
+write_excel_csv(estados, path = "data/estados.csv")
+
+brasil <- estados %>% group_by(date) %>%
+  summarise_if(is.numeric, sum) %>% 
+  mutate(location = "Brasil") %>%
+  full_join(estados, .) %>% arrange(date, location)
+
+ufs <- unique(brasil$location)
 
 for (uf in ufs) {
-  ts <- estados[[uf]]
-  tot_range <- seq(min(ts), max(ts))
-  uf_s <- sym(uf)
-  p1 <- ggplot(estados, aes(x = Data, y = !!uf_s)) + datatyle +
+  ts <- brasil %>% filter(location == uf)
+  if (nrow(ts) <= 1) next
+  tot_range <- seq(min(ts$total_cases), max(ts$total_cases))  
+  p1 <- ggplot(ts, aes(x = date, y = total_cases)) + datastyle +
     scale_y_continuous(breaks = pretty(tot_range), 
                        limits = c(min(tot_range), max(tot_range) * 1.05)) + 
     ggtitle(paste("Casos Confirmados -", uf)) + 
-    annotate("text", x = estados$Data[1], y = max(estados[[uf]]) * 1.01, 
-             label = "Fonte: Ministério da Saúde", hjust = 0, vjust = 0) +
-    annotation_custom(
-      grob = textGrob(label = "www.alanmol.com.br/covid-19", 
-                      hjust = 1, gp = gpar(cex = 0.8), vjust = 1),
-      xmin = max(estados$Data),
-      ymax = -(0.35 * max(estados[[uf]]))) +
-    coord_cartesian(clip = "off")
+    annotate("text", x = ts$date[1], y = max(ts$total_cases) * 1.01, 
+             label = "Fonte: Ministério da Saúde", hjust = 0, vjust = 0)
   
-  new_cases <- estados_new[[uf]]
-  new_range <- seq(min(new_cases), max(new_cases))
   
-  p2 <- ggplot(estados_new, aes(x = Data, y = !!uf_s)) + datatyle +
-    scale_y_continuous(breaks = pretty(new_range),
-                       limits = c(min(new_range), max(new_range) * 1.05)) +
+  tot_range_new <- seq(min(ts$new_cases), max(ts$new_cases))  
+  p2 <- ggplot(ts, aes(x = date, y = new_cases)) + datastyle +
+    scale_y_continuous(breaks = pretty(tot_range_new), 
+                       limits = c(min(tot_range_new), max(tot_range_new) * 1.05)) + 
     ggtitle(paste("Novos Casos Confirmados -", uf)) + 
-    annotate("text", x = estados$Data[1], y = max(new_cases) * 1.01, 
-             label = "Fonte: Ministério da Saúde", hjust = 0, vjust = 0) +
-    annotation_custom(
-      grob = textGrob(label = "www.alanmol.com.br/covid-19", 
-                      hjust = 1, gp = gpar(cex = 0.8), vjust = 1),
-      xmin = max(estados$Data) ,
-      ymax = -(0.35 * max(new_cases))) +
-        coord_cartesian(clip = "off")
+    annotate("text", x = ts$date[1], y = max(ts$new_cases) * 1.01, 
+             label = "Fonte: Ministério da Saúde", hjust = 0, vjust = 0)
   
   ggsave(paste0("data/", uf, "-Total.png"), plot = p1,
          device = png(),
@@ -101,22 +97,15 @@ for (uf in ufs) {
   dev.off()
 }
 
-distplot <- tail(estados, 1) %>% select(-Brasil, -Data) %>% 
-  pivot_longer(everything(), names_to = "Estado", values_to = "Casos") %>%
-  ggplot(aes(x = reorder(Estado, -Casos), y = Casos)) + geom_bar(stat = "identity") +
-  geom_text(aes(label = Casos), position = position_dodge(width = 0.9), 
+distplot <- estados %>% group_by(location) %>% filter(row_number() == n()) %>%
+  ggplot(aes(x = reorder(location, -total_cases), y = total_cases)) + geom_bar(stat = "identity") +
+  geom_text(aes(label = total_cases), position = position_dodge(width = 0.9), 
             vjust = -0.2, size = 3) +
-  theme_light() + labs(x = "Estado") + ggtitle("Distribuição dos casos") +
+  theme_light() + labs(x = "UF", y = "Casos confirmados") + ggtitle("Distribuição dos casos") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   theme(plot.title = element_text(hjust = 0.5)) +
-  annotate("text", x = ncol(estados) - 2, y = max(estados$`São Paulo`), 
-           label = "Fonte: Ministério da Saúde", hjust = 1, vjust = 1) +
-  annotation_custom(
-    grob = textGrob(label = "www.alanmol.com.br/covid-19", 
-                    hjust = 1, gp = gpar(cex = 0.8), vjust = 0.5),
-    xmin = ncol(estados) - 2,
-    ymax = -(0.9 * max(estados$`São Paulo`))) +
-  coord_cartesian(clip = "off")
+  annotate("text", x = 27, y = max(estados$total_cases), 
+           label = "Fonte: Ministério da Saúde", hjust = 1, vjust = 1) 
 
 distplot
 
@@ -134,28 +123,78 @@ pop_vec <- pop$População %>% setNames(pop$UF)
 pop_vec["Brasil"] <- sum(pop_vec)
 pop_vec <- pop_vec[order(names(pop_vec))]
 
-casos_confirmados <- unlist(tail(estados[,-1], 1))[order(colnames(estados[,-1]))]
+casos_confirmados <- brasil %>% group_by(location) %>% filter(row_number() == n()) %>%
+  arrange(location) %>% `[[`("total_cases")
 
 casos_por_hab <- tibble(Estado = names(pop_vec),
                         Casos = casos_confirmados / (pop_vec / 100000))
 
-cph_plot <- casos_por_hab %>% ggplot(aes(x = reorder(Estado, -Casos), y = Casos)) + geom_bar(stat = "identity") +
-  geom_text(aes(label = round(Casos, 2)), position = position_dodge(width = 0.9), 
+casos_por_hab_br <- casos_por_hab$Casos[casos_por_hab$Estado == "Brasil"]
+
+cph_plot <- casos_por_hab %>% filter(Estado != "Brasil") %>%
+  ggplot(aes(x = reorder(Estado, -Casos), y = Casos)) + geom_bar(stat = "identity") +
+  geom_text(aes(label = round(Casos, 2)), position = position_dodge(width = 0.9),
             vjust = -0.2, size = 3) +
-  theme_light() + labs(x = "Estado") + ggtitle("Casos por 100 mi habitantes") +
+  theme_light() + labs(x = "UF", y = "Casos/(habitantes/100000)") + ggtitle("Casos por 100 mil habitantes") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   theme(plot.title = element_text(hjust = 0.5)) +
-  annotate("text", x = 25, y = max(casos_por_hab$Casos), 
+  annotate("text", x = 25, y = max(casos_por_hab$Casos),
            label = "Fontes: Ministério da Saúde\nIBGE", hjust = 1, vjust = 1) +
-  annotation_custom(
-    grob = textGrob(label = "www.alanmol.com.br/covid-19", 
-                    hjust = 1, gp = gpar(cex = 0.8), vjust = 0.5),
-    xmin = 25,
-    ymax = -(0.85 * max(casos_por_hab$Casos))) +
-  coord_cartesian(clip = "off")
+  geom_hline(yintercept = casos_por_hab_br, linetype = "dashed") +
+  annotate("text", x = 27, y = casos_por_hab_br,
+           label = paste("Brasil =", round(casos_por_hab_br, 2)),
+           hjust = 1, vjust = -0.25)
 
 cph_plot
 
+ggsave(paste0("data/Casos por Habitantes.png"), plot = cph_plot,
+       device = png(),
+       width = 20,
+       height = 10,
+       units = "cm",
+       dpi = 100)
+dev.off()
+
+##### Comparações
+
+get_full_data_style <- function(mincases) {
+  list(theme_light(),
+       geom_line(aes(group = location, colour = location), size = 1),
+       geom_label_repel(aes(label = label), nudge_x = 1, na.rm = TRUE),
+       labs(x = "Dia", y = "Número de Casos", colour = "País"),
+       ggtitle(paste("Casos confirmados após o", mincases, "º caso")),
+       theme(plot.title = element_text(hjust = 0.5)),
+       scale_x_continuous(breaks = 1:100, minor_breaks = 1:100))
+}
+
+mincases <- 50
+full_data_style <- get_full_data_style(mincases)
+pot10 <- function(x) {10 ^ x}
+
+estado_comp <- estados %>%
+  filter(total_cases >= mincases) %>% group_by(location) %>%
+  mutate(day = 1:n()) %>%
+  mutate(label = if_else(day == max(day), location, NA_character_),
+         total_cases = log10(total_cases))
+
+estado_log_brks <- log10(c(seq(20, 100, 20), seq(200, 500, 100)))
+estado_comp_plot <- ggplot(estado_comp, aes(day, total_cases)) + 
+  full_data_style +
+  labs(y = "Número de Casos (log10)") +
+  scale_y_continuous(breaks = estado_log_brks, minor_breaks = NULL, labels = pot10) +
+  annotate("text", x = 1, y = max(estado_comp$total_cases), 
+         label = "Fonte: Ministério da Saúde do Brasil",
+         hjust = 0, vjust = 0.5)
+
+estado_comp_plot
+
+ggsave(paste0("data/Comparação Estados.png"), plot = estado_comp_plot,
+       device = png(),
+       width = 20,
+       height = 10,
+       units = "cm",
+       dpi = 100)
+dev.off()
 
 #########
 
@@ -167,32 +206,13 @@ full_data <- read_csv("https://covid.ourworldindata.org/data/ecdc/full_data.csv"
 
 full_data %>% filter(location == "Brazil") %>% tail
 
-br_ms <- estados[c("Data","Brasil")] %>%
-  mutate(location = "Brasil") %>%
-  rename(date = Data, total_cases = Brasil) %>%
-  mutate(date = date + 1) 
-
-br_ms_m <- mortes[c("Data","Brasil")] %>%
-  mutate(location = "Brasil") %>%
-  rename(date = Data, total_deaths = Brasil) %>%
-  mutate(date = date + 1) 
-
-full_data <- full_join(full_data, left_join(br_ms, br_ms_m))
+full_data <- full_join(full_data, filter(brasil, location == "Brasil"))
 
 compare <- c("Brasil", "Italy", "United States", "Spain", "France", "Argentina",
              "Iran", "South Korea", "Portugal", "Germany", "United Kingdom")
 maxday <- 15
 mincases <- 100
-pot10 <- function(x) {10 ^ x}
-
-full_data_style <- list(theme_light(),
-                        geom_line(aes(group = location, colour = location), size = 1),
-                        geom_label_repel(aes(label = label), nudge_x = 1, na.rm = TRUE),
-                        labs(x = "Dia", y = "Número de Casos", colour = "País"),
-                        ggtitle(paste("Casos confirmados após o", mincases, "º caso")),
-                        theme(plot.title = element_text(hjust = 0.5)),
-                        scale_x_continuous(breaks = 1:100, minor_breaks = 1:100))
-  
+full_data_style <- get_full_data_style(mincases)
 
 lin_data <- full_data %>% filter(location %in% compare) %>%
   filter(total_cases >= mincases ) %>% group_by(location) %>%
@@ -203,13 +223,7 @@ lin_plot <- ggplot(lin_data, aes(day, total_cases)) +
   full_data_style +
   annotate("text", x = 1, y = max(lin_data$total_cases), 
            label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde do Brasil",
-           hjust = 0, vjust = 0.5) +
-  annotation_custom(
-    grob = textGrob(label = "www.alanmol.com.br/covid-19", 
-                    hjust = 0.5, gp = gpar(cex = 0.8), vjust = 1),
-    xmin = maxday,
-    ymax = -(0.18 * max(lin_data$total_cases))) +
-  coord_cartesian(clip = "off")
+           hjust = 0, vjust = 0.5)
 
 lin_plot
 
@@ -229,13 +243,7 @@ log_plot <- ggplot(log_data, aes(day, total_cases)) + full_data_style +
   scale_y_continuous(breaks = 1:4, minor_breaks = NULL, labels = pot10) +
   annotate("text", x = 1, y = max(log_data$total_cases), 
            label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde do Brasil",
-           hjust = 0, vjust = 0.5) +
-  annotation_custom(
-    grob = textGrob(label = "www.alanmol.com.br/covid-19", 
-                    hjust = 0.5, gp = gpar(cex = 0.8), vjust = 1),
-    xmin = maxday,
-    ymax = (0.8 * diff(range(log_data$total_cases)))) +
-  coord_cartesian(clip = "off")
+           hjust = 0, vjust = 0.5)
 
 log_plot
 
@@ -258,35 +266,22 @@ comp_plot <- ggplot(comp_data, aes(day, total_cases)) + full_data_style +
   scale_y_continuous(breaks = 1:4, minor_breaks = NULL, labels = pot10) +
   annotate("text", x = 1, y = max(comp_data$total_cases), 
            label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde do Brasil",
-           hjust = 0, vjust = 0.5) +
-  annotation_custom(
-    grob = textGrob(label = "www.alanmol.com.br/covid-19", 
-                    hjust = 0.5, gp = gpar(cex = 0.8), vjust = 1),
-    xmin = 30,
-    ymax = (0.75 * diff(range(log_data$total_cases)))) +
-  coord_cartesian(clip = "off")
+           hjust = 0, vjust = 0.5)
 
 comp_plot
 
 
 ### Mortes
 
-death_plot <- tail(mortes, 1) %>% select(-Brasil, -Data) %>% 
-  pivot_longer(everything(), names_to = "Estado", values_to = "Casos") %>%
-  ggplot(aes(x = reorder(Estado, -Casos), y = Casos)) + geom_bar(stat = "identity") +
-  geom_text(aes(label = Casos), position = position_dodge(width = 0.9), 
+death_plot <- estados %>% group_by(location) %>% filter(row_number() == n()) %>%
+  ggplot(aes(x = reorder(location, -total_deaths), y = total_deaths)) + geom_bar(stat = "identity") +
+  geom_text(aes(label = total_deaths), position = position_dodge(width = 0.9), 
             vjust = -0.2, size = 3) +
-  theme_light() + labs(x = "Estado", y = "Óbitos") + ggtitle("Distribuição dos óbitos") +
+  theme_light() + labs(x = "UF", y = "Casos confirmados") + ggtitle("Distribuição dos casos") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   theme(plot.title = element_text(hjust = 0.5)) +
-  annotate("text", x = ncol(estados) - 2, y = max(estados$`São Paulo`), 
-           label = "Fonte: Ministério da Saúde", hjust = 1, vjust = 1) +
-  annotation_custom(
-    grob = textGrob(label = "www.alanmol.com.br/covid-19", 
-                    hjust = 1, gp = gpar(cex = 0.8), vjust = 0.5),
-    xmin = ncol(estados) - 2,
-    ymax = -(1.1 * max(estados$`São Paulo`))) +
-  coord_cartesian(clip = "off")
+  annotate("text", x = 27, y = max(estados$total_deaths), 
+           label = "Fonte: Ministério da Saúde", hjust = 1, vjust = 1)
 
 death_plot
 
@@ -306,25 +301,19 @@ death_comp_plot <- death_comp %>%
   geom_text(aes(label = paste0(round(death_ratio * 100, 2), "%")) , position = position_dodge(width = 0.9), 
             vjust = -0.2, size = 3) +
   scale_y_continuous(breaks = seq(0, 0.1, 0.025), labels = paste0(seq(0, 10, 2.5), "%")) +
-  theme_light() + labs(x = "País", y = "Mortalidade") + ggtitle("Mortalidade") +
+  theme_light() + labs(x = "País", y = "Letalidade") + ggtitle("Letalidade") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   theme(plot.title = element_text(hjust = 0.5)) +
   annotate("text", x = nrow(death_comp), y = avg_death,
-           label = paste("Mortalidade média (n >= 20):", avg_death * 100, "%"), 
+           label = paste("Letalidade média (n >= 20):", avg_death * 100, "%"), 
            hjust = 1, vjust = -0.25) +
   annotate("text", x = nrow(death_comp), y = 0.09, 
            label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde do Brasil", 
-           hjust = 1, vjust = 1) +
-  annotation_custom(
-    grob = textGrob(label = "www.alanmol.com.br/covid-19", 
-                    hjust = 1, gp = gpar(cex = 0.8), vjust = 0.5),
-    xmin = nrow(death_comp) - 1,
-    ymax = -0.065) +
-  coord_cartesian(clip = "off") 
+           hjust = 1, vjust = 1) 
 
 death_comp_plot
 
-ggsave(paste0("data/Mortalidade.png"), plot = death_comp_plot,
+ggsave(paste0("data/Letalidade.png"), plot = death_comp_plot,
        device = png(),
        width = 20,
        height = 10,
