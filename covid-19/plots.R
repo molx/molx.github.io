@@ -173,7 +173,7 @@ pot10 <- function(x) {10 ^ x}
 
 estado_comp <- estados %>%
   filter(total_cases >= mincases) %>% group_by(location) %>%
-  mutate(day = 1:n()) %>%
+  filter(n() > 1) %>% mutate(day = 1:n()) %>%
   mutate(label = if_else(day == max(day), location, NA_character_),
          total_cases = log10(total_cases))
 
@@ -183,7 +183,7 @@ estado_comp_plot <- ggplot(estado_comp, aes(day, total_cases)) +
   labs(y = "Número de Casos (log10)") +
   scale_y_continuous(breaks = estado_log_brks, minor_breaks = NULL, labels = pot10) +
   annotate("text", x = 1, y = max(estado_comp$total_cases), 
-         label = "Fonte: Ministério da Saúde do Brasil",
+         label = "Fonte: Ministério da Saúde ",
          hjust = 0, vjust = 0.5)
 
 estado_comp_plot
@@ -208,9 +208,9 @@ full_data %>% filter(location == "Brazil") %>% tail
 
 full_data <- full_join(full_data, filter(brasil, location == "Brasil"))
 
-compare <- c("Brasil", "Italy", "United States", "Spain", "France", "Argentina",
-             "Iran", "South Korea", "Portugal", "Germany", "United Kingdom")
-maxday <- 15
+compare <- c("Brasil", "Italy", "United States", "Spain", "France",
+             "South Korea", "Portugal", "Germany", "United Kingdom")
+maxday <- 20
 mincases <- 100
 full_data_style <- get_full_data_style(mincases)
 
@@ -222,7 +222,7 @@ lin_data <- full_data %>% filter(location %in% compare) %>%
 lin_plot <- ggplot(lin_data, aes(day, total_cases)) + 
   full_data_style +
   annotate("text", x = 1, y = max(lin_data$total_cases), 
-           label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde do Brasil",
+           label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde do",
            hjust = 0, vjust = 0.5)
 
 lin_plot
@@ -238,11 +238,13 @@ dev.off()
 log_data <- lin_data %>%
   mutate(total_cases = log10(total_cases)) 
 
+world_log_brks <- log10(c(seq(2.5e2, 1e3, 2.5e2), seq(2.5e3, 1e4, 2.5e3), seq(2.5e4, 1e5, 2.5e4)))
+
 log_plot <- ggplot(log_data, aes(day, total_cases)) + full_data_style +
   labs(y = "Número de Casos (log10)") +
-  scale_y_continuous(breaks = 1:4, minor_breaks = NULL, labels = pot10) +
+  scale_y_continuous(breaks = world_log_brks, minor_breaks = NULL, labels = pot10) +
   annotate("text", x = 1, y = max(log_data$total_cases), 
-           label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde do Brasil",
+           label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde",
            hjust = 0, vjust = 0.5)
 
 log_plot
@@ -263,9 +265,9 @@ comp_data <- full_data %>% filter(location %in% compare) %>%
 
 comp_plot <- ggplot(comp_data, aes(day, total_cases)) + full_data_style +
   labs(y = "Número de Casos (log10)") +
-  scale_y_continuous(breaks = 1:4, minor_breaks = NULL, labels = pot10) +
+  scale_y_continuous(breaks = world_log_brks, minor_breaks = NULL, labels = pot10) +
   annotate("text", x = 1, y = max(comp_data$total_cases), 
-           label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde do Brasil",
+           label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde",
            hjust = 0, vjust = 0.5)
 
 comp_plot
@@ -304,11 +306,11 @@ death_comp_plot <- death_comp %>%
   theme_light() + labs(x = "País", y = "Letalidade") + ggtitle("Letalidade") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   theme(plot.title = element_text(hjust = 0.5)) +
-  annotate("text", x = nrow(death_comp), y = avg_death,
+  annotate("text", x = nrow(death_comp) + 0.5, y = avg_death,
            label = paste("Letalidade média (n >= 20):", avg_death * 100, "%"), 
            hjust = 1, vjust = -0.25) +
-  annotate("text", x = nrow(death_comp), y = 0.09, 
-           label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde do Brasil", 
+  annotate("text", x = nrow(death_comp) + 0.5, y = 0.09, 
+           label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde", 
            hjust = 1, vjust = 1) 
 
 death_comp_plot
@@ -319,4 +321,20 @@ ggsave(paste0("data/Letalidade.png"), plot = death_comp_plot,
        height = 10,
        units = "cm",
        dpi = 100)
+dev.off()
+
+today <- format(Sys.Date(), format = "%d de %B")
+rng_dat <- 10 * seq(0, 1, length.out = 11) ^ 10
+png("data/Instagram.png", 
+    width = 20,
+    height = 10,
+    units = "cm",
+    res = 100)
+par(mar = c(3, 3, 3, 3), xpd = TRUE)
+plot(0:10, rng_dat, xaxt = "n", yaxt = "n", frame.plot = TRUE,
+     type = "b", xlab = NA, ylab = NA, 
+     xlim = c(0, 10), ylim = c(0, 10))
+text(x = 5, y = 5, labels = paste("Gráficos do dia", today),
+     cex = 2.8)
+rect(-1, -1, 11, 11, lwd = 3)
 dev.off()
