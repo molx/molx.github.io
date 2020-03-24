@@ -6,6 +6,7 @@ library(tibble)
 library(ggplot2)
 library(grid)
 library(ggrepel)
+library(gganimate)
 
 # source <- "Fonte: 2019 Novel Coronavirus COVID-19 (2019-nCoV)\nData Repository by Johns Hopkins CSSE\nhttps://github.com/CSSEGISandData/COVID-19"
 
@@ -338,3 +339,53 @@ text(x = 5, y = 5, labels = paste("Gráficos do dia", today),
      cex = 2.8)
 rect(-1, -1, 11, 11, lwd = 3)
 dev.off()
+
+#####
+
+#Bar Chart Race
+
+estados_hora <- estados %>% mutate(date = as.POSIXct(date)) %>% group_by(date, location) %>% 
+  do({
+    dia <- .
+    ref_row <- dia %>% slice(n())
+    hours_rows <- tibble(date = seq(ref_row$date, by = "hour", length.out = 24),
+                         location = ref_row$location,
+                         total_cases = round(seq(from = ref_row$total_cases - ref_row$new_cases,
+                                           to = ref_row$total_cases,
+                                           length.out = 24), 0))
+    estados <- hours_rows
+  })
+  
+estados_hora %>% filter(location == "Distrito Federal") %>% tail(50)
+  
+
+p <- estados_hora %>% group_by(date) %>%
+  arrange(total_cases) %>% mutate(rank = 1:n()) %>%
+  ggplot(aes(x = rank, y = total_cases, group = location)) +
+  geom_tile(aes(y = total_cases / 2, height = total_cases, fill = location), width = 0.9) +
+  geom_text(aes(label = location, y = -10), hjust = "right", colour = "black", fontface = "bold") +
+  geom_text(aes(label = scales::comma(total_cases)), hjust = "left", nudge_y = 10, colour = "grey30") +
+  coord_flip(clip = "off") +
+  #scale_x_discrete("") +
+  scale_y_continuous("",labels = scales::comma, 
+                     expand = c(0, 0)) +
+                     #limits = c(0, max(estados_hora$total_cases) * 1.05)) +
+  #hrbrthemes::theme_ipsum(plot_title_size = 32, subtitle_size = 24, caption_size = 20, base_size = 20) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        legend.position = "none",
+        plot.margin = margin(1,1,1,3.5,"cm"),
+        axis.text.y = element_blank()) +
+  # gganimate code to transition by year:
+  transition_time(date) +
+  labs(x = "",
+       title = "Casos confirmados por UF",
+       subtitle = "Casos confirmados em {format(frame_time, format = '%d/%m/%Y')}",
+       caption = "Fonte: Ministério da Saúde") +
+  scale_fill_manual(name = 'UF', values = rainbow(27)) +
+  #ease_aes('cubic-in-out') +
+  ease_aes('linear') 
+
+anim <- animate(p, duration = 30, fps = 25, end_pause = 100, 
+                width = 787, height = 500)
+anim_save("data/EstadosAnim.gif")
