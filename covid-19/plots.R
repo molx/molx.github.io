@@ -33,10 +33,22 @@ datastyle <- list(theme_light(), geom_line(size = 1),
 # Ministério da saúde
 # http://plataforma.saude.gov.br/novocoronavirus/
 
+#Calculating new cases by the difference between day and day - 1
 calc_new <- function(x) {
   new <- x - lag(x)
   new[is.na(new)] <- 0
   new
+}
+
+# Functio to calculate theoretical exponetial growth
+# factor = the amount which grows
+# time = the time it takes to grow by factor
+# maxx = max time to generate
+# e.g.: factor = 2, time = 3, means doubles every 3 units of time
+growth_line <- function(factor, time, maxx) {
+  x <- 1:maxx
+  y <- factor ^ (x / time)
+  matrix(c(x, y), ncol = 2)
 }
 
 casos <- read_excel("data/Brasil.xlsx", sheet = "Confirmados") %>%
@@ -61,6 +73,20 @@ brasil <- estados %>% group_by(date) %>%
   full_join(estados, .) %>% arrange(date, location)
 
 ufs <- unique(brasil$location)
+
+##Brasil (log)
+
+brasil_log_data <- brasil %>% filter(location == "Brasil", total_cases >= 100) %>% 
+  mutate(total_cases = log10(total_cases))
+
+tot_range <- seq(min(brasil_log_data$total_cases), max(brasil_log_data$total_cases))  
+
+brasil_log_plot <- ggplot(brasil_log_data, aes(x = date, y = total_cases)) + datastyle +
+  ggtitle(paste("Casos Confirmados -", uf)) + 
+  annotate("text", x = brasil_log_data$date[1], y = max(brasil_log_data$total_cases) * 1.01, 
+           label = "Fonte: Ministério da Saúde", hjust = 0, vjust = 0)
+
+brasil_log_plot
 
 for (uf in ufs) {
   ts <- brasil %>% filter(location == uf)
