@@ -43,10 +43,10 @@ calc_new <- function(x) {
 # Functio to calculate theoretical exponetial growth
 # factor = the amount which grows
 # time = the time it takes to grow by factor
-# maxx = max time to generate
+# x = the time period to simulate
 # e.g.: factor = 2, time = 3, means doubles every 3 units of time
-growth_line <- function(factor, time, maxx) {
-  x <- 1:maxx
+growth_line <- function(factor, time, duration) {
+  x <- 0:(duration - 1)
   y <- factor ^ (x / time)
   matrix(c(x, y), ncol = 2)
 }
@@ -72,21 +72,41 @@ brasil <- estados %>% group_by(date) %>%
   mutate(location = "Brasil") %>%
   full_join(estados, .) %>% arrange(date, location)
 
-ufs <- unique(brasil$location)
-
 ##Brasil (log)
 
-brasil_log_data <- brasil %>% filter(location == "Brasil", total_cases >= 100) %>% 
-  mutate(total_cases = log10(total_cases))
+brasil_log_data <- brasil %>% filter(location == "Brasil", total_cases >= 50) %>% 
+  #mutate(total_cases = log10(total_cases)) %>% 
+  mutate(time = as.numeric(date - date[1]) + 1)
 
 tot_range <- seq(min(brasil_log_data$total_cases), max(brasil_log_data$total_cases))  
 
 brasil_log_plot <- ggplot(brasil_log_data, aes(x = date, y = total_cases)) + datastyle +
-  ggtitle(paste("Casos Confirmados -", uf)) + 
+  ggtitle(paste("Casos Confirmados - Brasil")) + 
   annotate("text", x = brasil_log_data$date[1], y = max(brasil_log_data$total_cases) * 1.01, 
            label = "Fonte: Ministério da Saúde", hjust = 0, vjust = 0)
 
-brasil_log_plot
+brasil_log_plot + geom_vline(xintercept = as.numeric(brasil_log_data$date[1]))
+
+fit <- nls(total_cases ~ a*b^(time), data = brasil_log_data, 
+           start = list(a = 62.77, b = 1.9))
+
+fit <- nls(total_cases ~ a*b^(time/tau), data = brasil_log_data, 
+           start = list(a = 62.77, b = 1.9, tau = 3.33))
+
+fit <- nls(total_cases ~ SSasymp(time, 1e7, 0, log_a), data = brasil_log_data)
+
+lm(log(total_cases) ~ time, data = brasil_log_data)
+
+x <- brasil_log_data$time
+y <- 2 ^ (x / 3)
+plot(x, brasil_log_data$total_cases, type = "l")
+lines(x, 80 * y)
+
+
+#  geom_abline(intercept = -2358.3198853, slope = 0.1287398) +
+#  geom_abline(intercept = -2358.3198853, slope = 0.1288)
+
+ufs <- unique(brasil$location)
 
 for (uf in ufs) {
   ts <- brasil %>% filter(location == uf)
@@ -298,6 +318,14 @@ comp_plot <- ggplot(comp_data, aes(day, total_cases)) + full_data_style +
            hjust = 0, vjust = 0.5)
 
 comp_plot
+
+ggsave(paste0("data/Comparação - Log Full.png"), plot = comp_plot,
+       device = png(),
+       width = 20,
+       height = 10,
+       units = "cm",
+       dpi = 100)
+dev.off()
 
 
 ### Mortes
