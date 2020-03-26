@@ -7,6 +7,7 @@ library(ggplot2)
 library(grid)
 library(ggrepel)
 library(gganimate)
+library(gghighlight)
 
 # source <- "Fonte: 2019 Novel Coronavirus COVID-19 (2019-nCoV)\nData Repository by Johns Hopkins CSSE\nhttps://github.com/CSSEGISandData/COVID-19"
 
@@ -29,6 +30,17 @@ datastyle <- list(theme_light(), geom_line(size = 1),
                   theme(plot.title = element_text(hjust = 0.5)),
                   labs(x = "Data", y = "Número de Casos"))
 
+
+get_full_data_style <- function(mincases, group = "País") {
+  list(theme_light(),
+       geom_line(aes(group = location, colour = location), size = 1),
+       geom_label_repel(aes(label = label), nudge_x = 1, na.rm = TRUE),
+       labs(x = "Dia", y = "Número de Casos", colour = group),
+       ggtitle(paste("Casos confirmados após o", mincases, "º caso")),
+       theme(plot.title = element_text(hjust = 0.5)),
+       scale_x_continuous(breaks = 1:100, minor_breaks = 1:100))
+}
+
 ################################
 # Ministério da saúde
 # http://plataforma.saude.gov.br/novocoronavirus/
@@ -40,15 +52,24 @@ calc_new <- function(x) {
   new
 }
 
-# Functio to calculate theoretical exponetial growth
+# Function to calculate theoretical exponetial growth
 # factor = the amount which grows
 # time = the time it takes to grow by factor
 # x = the time period to simulate
 # e.g.: factor = 2, time = 3, means doubles every 3 units of time
 growth_line <- function(factor, time, duration) {
-  x <- 0:(duration - 1)
+  x <- duration
   y <- factor ^ (x / time)
-  matrix(c(x, y), ncol = 2)
+  data.frame(x = x, y = y)
+}
+
+# Calculate 10 power to use in log scale labels
+pot10 <- function(x) {10 ^ x}
+
+growth_line_log <- function(factor, time, duration) {
+  x <- duration
+  y <- duration * log10(factor) / time
+  data.frame(x = x, y = y)
 }
 
 casos <- read_excel("data/Brasil.xlsx", sheet = "Confirmados") %>%
@@ -74,33 +95,48 @@ brasil <- estados %>% group_by(date) %>%
 
 ##Brasil (log)
 
-brasil_log_data <- brasil %>% filter(location == "Brasil", total_cases >= 50) %>% 
-  #mutate(total_cases = log10(total_cases)) %>% 
+brasil_log_data <- brasil %>% filter(location == "Brasil", total_cases >= 100) %>% 
+  mutate(total_cases = log10(total_cases)) %>% 
   mutate(time = as.numeric(date - date[1]) + 1)
 
 tot_range <- seq(min(brasil_log_data$total_cases), max(brasil_log_data$total_cases))  
 
-brasil_log_plot <- ggplot(brasil_log_data, aes(x = date, y = total_cases)) + datastyle +
-  ggtitle(paste("Casos Confirmados - Brasil")) + 
-  annotate("text", x = brasil_log_data$date[1], y = max(brasil_log_data$total_cases) * 1.01, 
-           label = "Fonte: Ministério da Saúde", hjust = 0, vjust = 0)
+brasil_log_plot <- ggplot(brasil_log_data, aes(x = time, y = total_cases)) + #datastyle +
+  geom_line(size = 1) +
+  ggtitle(paste("Casos Confirmados - Brasil")) 
 
-brasil_log_plot + geom_vline(xintercept = as.numeric(brasil_log_data$date[1]))
+brasil_log_plot
 
-fit <- nls(total_cases ~ a*b^(time), data = brasil_log_data, 
-           start = list(a = 62.77, b = 1.9))
+fit0 <- lm(total_cases ~ time, data = brasil_log_data)
+intcpt <- fit0$coefficients[1]
 
-fit <- nls(total_cases ~ a*b^(time/tau), data = brasil_log_data, 
-           start = list(a = 62.77, b = 1.9, tau = 3.33))
+slopes <- sapply(1:5, function(dbl_time) {
+  growth <- growth_line_log(2, dbl_time, brasil_log_data$time)
+  fit <- lm(y ~ x, data = growth)
+  fit$coefficients[2]
+})
 
-fit <- nls(total_cases ~ SSasymp(time, 1e7, 0, log_a), data = brasil_log_data)
+ablines <- lapply(1:5, function(dbl_time) {
+  growth <- growth_line_log(2, dbl_time, brasil_log_data$time)
+  fit <- lm(y ~ x, data = growth)
+  data.frame(a = intcpt, b = fit$coefficients[2], style = dbl_time)
+}) %>% do.call(rbind, .)
 
-lm(log(total_cases) ~ time, data = brasil_log_data)
+# ablines <- lapply(seq_along(slopes), function(i) {
+#   geom_abline(linetype = i, slope = slopes[i], intercept = intcpt)
+# })
 
-x <- brasil_log_data$time
-y <- 2 ^ (x / 3)
-plot(x, brasil_log_data$total_cases, type = "l")
-lines(x, 80 * y)
+br_log_brks <- log10(c(seq(2.5e2, 1e3, 2.5e2), seq(2.5e3, 1e4, 2.5e3)))
+
+brasil_log_plot + theme_light() + #datastyle + # ablines + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(hjust = 0.5)) +
+  geom_abline(aes(intercept = a, slope = b, linetype = factor(style)), data = ablines) +
+  scale_x_continuous(limits = c(0, 15), breaks = seq_along(brasil_log_data$time), 
+                     minor_breaks = NULL,
+                     labels = format(brasil_log_data$date, format = "%d/%m")) +
+  scale_y_continuous(limits = c(NA, 4), breaks = br_log_brks, labels = pot10) +
+  labs(x = "Data", y = "Casos Confirmados (log)", linetype = "Dias para\ndobrar")
+
 
 
 #  geom_abline(intercept = -2358.3198853, slope = 0.1287398) +
@@ -204,19 +240,8 @@ dev.off()
 
 ##### Comparações
 
-get_full_data_style <- function(mincases) {
-  list(theme_light(),
-       geom_line(aes(group = location, colour = location), size = 1),
-       geom_label_repel(aes(label = label), nudge_x = 1, na.rm = TRUE),
-       labs(x = "Dia", y = "Número de Casos", colour = "País"),
-       ggtitle(paste("Casos confirmados após o", mincases, "º caso")),
-       theme(plot.title = element_text(hjust = 0.5)),
-       scale_x_continuous(breaks = 1:100, minor_breaks = 1:100))
-}
-
-mincases <- 50
-full_data_style <- get_full_data_style(mincases)
-pot10 <- function(x) {10 ^ x}
+mincases <- 100
+full_data_style <- get_full_data_style(mincases, "Estado")
 
 estado_comp <- estados %>%
   filter(total_cases >= mincases) %>% group_by(location) %>%
@@ -256,15 +281,16 @@ full_data %>% filter(location == "Brazil") %>% tail
 full_data <- full_join(full_data, filter(brasil, location == "Brasil"))
 
 compare <- c("Brasil", "Italy", "United States", "Spain", "France",
-             "South Korea", "Portugal", "Germany", "United Kingdom")
+             "South Korea", "Germany", "United Kingdom")
 maxday <- 20
 mincases <- 100
 full_data_style <- get_full_data_style(mincases)
 
 lin_data <- full_data %>% filter(location %in% compare) %>%
-  filter(total_cases >= mincases ) %>% group_by(location) %>%
+  filter(total_cases >= mincases) %>% group_by(location) %>%
   mutate(day = 1:n()) %>% filter(day <= maxday) %>%
-  mutate(label = if_else(day == max(day), location, NA_character_))
+  mutate(label = if_else(day == max(day), location, NA_character_),
+         wd = if_else(location == "Brasil", "A", "B"))
 
 lin_plot <- ggplot(lin_data, aes(day, total_cases)) + 
   full_data_style +
@@ -287,13 +313,15 @@ log_data <- lin_data %>%
 
 world_log_brks <- log10(c(seq(2.5e2, 1e3, 2.5e2), seq(2.5e3, 1e4, 2.5e3), seq(2.5e4, 1e5, 2.5e4)))
 
-log_plot <- ggplot(log_data, aes(day, total_cases)) + full_data_style +
+log_plot <- ggplot(log_data, aes(day, total_cases)) + 
+  full_data_style +
   labs(y = "Número de Casos (log10)") +
   scale_y_continuous(breaks = world_log_brks, minor_breaks = NULL, labels = pot10) +
   annotate("text", x = 1, y = max(log_data$total_cases), 
            label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde",
            hjust = 0, vjust = 0.5)
-
+  
+  
 log_plot
 
 ggsave(paste0("data/Comparação - Log.png"), plot = log_plot,
@@ -328,13 +356,13 @@ ggsave(paste0("data/Comparação - Log Full.png"), plot = comp_plot,
 dev.off()
 
 
-### Mortes
+### Óbitos
 
 death_plot <- estados %>% group_by(location) %>% filter(row_number() == n()) %>%
   ggplot(aes(x = reorder(location, -total_deaths), y = total_deaths)) + geom_bar(stat = "identity") +
   geom_text(aes(label = total_deaths), position = position_dodge(width = 0.9), 
             vjust = -0.2, size = 3) +
-  theme_light() + labs(x = "UF", y = "Casos confirmados") + ggtitle("Distribuição dos casos") +
+  theme_light() + labs(x = "UF", y = "Óbitos confirmados") + ggtitle("Distribuição dos óbitos") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   theme(plot.title = element_text(hjust = 0.5)) +
   annotate("text", x = 27, y = max(estados$total_deaths), 
