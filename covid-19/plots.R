@@ -7,7 +7,6 @@ library(ggplot2)
 library(grid)
 library(ggrepel)
 library(gganimate)
-library(gghighlight)
 
 # source <- "Fonte: 2019 Novel Coronavirus COVID-19 (2019-nCoV)\nData Repository by Johns Hopkins CSSE\nhttps://github.com/CSSEGISandData/COVID-19"
 
@@ -52,6 +51,10 @@ calc_new <- function(x) {
   new
 }
 
+na_to_zero <- function(x) {
+  ifelse(is.na(x), 0, x)
+}
+
 # Function to calculate theoretical exponetial growth
 # factor = the amount which grows
 # time = the time it takes to grow by factor
@@ -82,11 +85,18 @@ mortes <- read_excel("data/Brasil.xlsx", sheet = "Mortes") %>%
 
 estados <- full_join(casos, mortes) %>% group_by(location) %>%
   mutate(new_cases = calc_new(total_cases),
-         new_deaths = calc_new(total_deaths))
+         new_deaths = calc_new(total_deaths)) %>%
+  mutate_if(is.numeric, na_to_zero)
 
 estados %>% filter(location == "São Paulo") %>% tail
 
 write_excel_csv(estados, path = "data/estados.csv")
+
+writeLines(paste("var estados =",
+                 toJSON(estados, pretty = TRUE)),
+           con = "estados.js")
+
+
 
 brasil <- estados %>% group_by(date) %>%
   summarise_if(is.numeric, sum) %>% 
@@ -104,8 +114,6 @@ tot_range <- seq(min(brasil_log_data$total_cases), max(brasil_log_data$total_cas
 brasil_log_plot <- ggplot(brasil_log_data, aes(x = time, y = total_cases)) + #datastyle +
   geom_line(size = 1) +
   ggtitle(paste("Casos Confirmados - Brasil")) 
-
-brasil_log_plot
 
 fit0 <- lm(total_cases ~ time, data = brasil_log_data)
 intcpt <- fit0$coefficients[1]
@@ -126,7 +134,7 @@ ablines <- lapply(1:5, function(dbl_time) {
 #   geom_abline(linetype = i, slope = slopes[i], intercept = intcpt)
 # })
 
-br_log_brks <- log10(c(seq(2.5e2, 1e3, 2.5e2), seq(2.5e3, 1e4, 2.5e3)))
+br_log_brks <- log10(c(seq(2.5e2, 1e3, 2.5e2), seq(2.5e3, 1e4, 2.5e3), seq(2.5e4, 1e5, 2.5e4)))
 
 brasil_log_plot + theme_light() + #datastyle + # ablines + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(hjust = 0.5)) +
@@ -136,6 +144,31 @@ brasil_log_plot + theme_light() + #datastyle + # ablines +
                      labels = format(brasil_log_data$date, format = "%d/%m")) +
   scale_y_continuous(limits = c(NA, 4), breaks = br_log_brks, labels = pot10) +
   labs(x = "Data", y = "Casos Confirmados (log)", linetype = "Dias para\ndobrar")
+
+next_day <- nrow(brasil_log_data) + 1
+est_interval <- 7
+estimates <- data.frame(x = next_day:(next_day + est_interval - 1),
+  y = predict(lm(total_cases ~ time, data = tail(brasil_log_data, est_interval)), 
+              data.frame(time = next_day:(next_day + est_interval - 1)),
+              interval = 'pred'))
+
+brasil_log_plot + theme_light() + #datastyle + # ablines + 
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous(limits = c(0, max(brasil_log_data$time) + 5), 
+                     breaks = 0:(max(brasil_log_data$time) + 5), 
+                     minor_breaks = NULL,
+                     labels = format(seq(brasil_log_data$date[1], by = "days", 
+                                         length.out = nrow(brasil_log_data) + 6),
+                                     format = "%d/%m")) +
+  scale_y_continuous(limits = c(NA, 4.2), breaks = br_log_brks, labels = pot10,
+                     minor_breaks = NULL) +
+  labs(x = "Data", y = "Casos (log)") +
+  ggtitle(paste("Previsão de casos de acordo com últimos", est_interval, "dias")) +
+  geom_smooth(data = tail(brasil_log_data, est_interval), method = "lm", interval = "pred",
+              fullrange = TRUE, level = 0.95, formula = y ~ x) +
+  geom_text(data = estimates, aes(x = x, y = y.upr + 0.05, label = round(pot10(y.upr)))) +
+  geom_text(data = estimates, aes(x = x, y = y.lwr - 0.05, label = round(pot10(y.lwr))))
 
 
 
@@ -341,7 +374,10 @@ comp_data <- full_data %>% filter(location %in% compare) %>%
 comp_plot <- ggplot(comp_data, aes(day, total_cases)) + full_data_style +
   labs(y = "Número de Casos (log10)") +
   scale_y_continuous(breaks = world_log_brks, minor_breaks = NULL, labels = pot10) +
-  annotate("text", x = 1, y = max(comp_data$total_cases), 
+  scale_x_continuous(breaks = seq(0, max(comp_data$day) + 1, by = 2),
+                     minor_breaks = seq(0, max(comp_data$day) + 1, by = 1),
+                     expand = c(0, 1)) +
+  annotate("text", x = 2, y = max(comp_data$total_cases), 
            label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde",
            hjust = 0, vjust = 0.5)
 
@@ -375,8 +411,11 @@ avg_death <- full_data %>% filter(total_deaths >= 20) %>%
   group_by(location) %>% slice(n()) %>%
   `$`("death_ratio") %>% mean %>% round(4)
 
+compare2 <- c("Brasil", "Italy", "United States", "Spain", "France",
+              "South Korea", "Germany", "United Kingdom", "China")
+
 death_comp <- full_data %>%
-  filter(location %in% compare) %>%
+  filter(location %in% compare2) %>%
   mutate(death_ratio = total_deaths / total_cases) %>%
   group_by(location) %>% slice(n())
 
