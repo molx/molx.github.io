@@ -146,34 +146,104 @@ brasil_log_plot + theme_light() + #datastyle + # ablines +
   labs(x = "Data", y = "Casos Confirmados (log)", linetype = "Dias para\ndobrar")
 
 next_day <- nrow(brasil_log_data) + 1
-est_interval <- 7
-estimates <- data.frame(x = next_day:(next_day + est_interval - 1),
-  y = predict(lm(total_cases ~ time, data = tail(brasil_log_data, est_interval)), 
-              data.frame(time = next_day:(next_day + est_interval - 1)),
-              interval = 'pred'))
+est_ref_interval <- 7
+est_pred_interval <- 5
+estimates <- data.frame(x = next_day:(next_day + est_ref_interval - 1),
+  y = predict(lm(total_cases ~ time, data = tail(brasil_log_data, est_ref_interval),
+                 weights = sqrt(1:est_ref_interval)), 
+              data.frame(time = next_day:(next_day + est_ref_interval - 1)),
+              interval = 'conf')) %>%
+  head(est_pred_interval)
 
 brasil_log_plot + theme_light() + #datastyle + # ablines + 
-  geom_point() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(hjust = 0.5)) +
-  scale_x_continuous(limits = c(0, max(brasil_log_data$time) + 5), 
-                     breaks = 0:(max(brasil_log_data$time) + 5), 
+  scale_x_continuous(limits = c(0, max(brasil_log_data$time) + est_pred_interval), 
+                     breaks = 0:(max(brasil_log_data$time) + est_pred_interval), 
                      minor_breaks = NULL,
                      labels = format(seq(brasil_log_data$date[1], by = "days", 
-                                         length.out = nrow(brasil_log_data) + 6),
+                                         length.out = nrow(brasil_log_data) + est_pred_interval + 1),
                                      format = "%d/%m")) +
-  scale_y_continuous(limits = c(NA, 4.2), breaks = br_log_brks, labels = pot10,
+  scale_y_continuous(limits = c(NA, max(estimates$y.upr) * 1.1), breaks = br_log_brks, labels = pot10,
                      minor_breaks = NULL) +
   labs(x = "Data", y = "Casos (log)") +
-  ggtitle(paste("Previsão de casos de acordo com últimos", est_interval, "dias")) +
-  geom_smooth(data = tail(brasil_log_data, est_interval), method = "lm", interval = "pred",
-              fullrange = TRUE, level = 0.95, formula = y ~ x) +
-  geom_text(data = estimates, aes(x = x, y = y.upr + 0.05, label = round(pot10(y.upr)))) +
-  geom_text(data = estimates, aes(x = x, y = y.lwr - 0.05, label = round(pot10(y.lwr))))
+  ggtitle(paste("Previsão de casos de acordo com últimos", est_ref_interval, "dias")) +
+  geom_smooth(data = tail(brasil_log_data, est_ref_interval), method = "lm",
+              fullrange = TRUE, level = 0.95, formula = y ~ x, size = 0.5, linetype = "f4") +
+  geom_text(aes(x = time, y = total_cases, label = round(pot10(total_cases))),
+            hjust = 1.1, vjust = -0.1, size = 3) +
+  geom_point(data = brasil_log_data, aes(x = time, y = total_cases)) +
+  geom_text(data = estimates, aes(x = x, y = y.upr, label = round(pot10(y.upr))),
+            hjust = 1.1, vjust = -1.5, size = 3) +
+  geom_text(data = estimates, aes(x = x, y = y.lwr, label = round(pot10(y.lwr))),
+            hjust = 1.1, vjust = 1.5, size = 3) +
+  geom_text(data = estimates, aes(x = x, y = y.fit, label = round(pot10(y.fit))),
+            hjust = 1.1, vjust = -0.1, size = 3) 
 
+### Comparação inclinações vs isolamento
 
+brasil_log_plot + theme_light() + #datastyle + # ablines + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(hjust = 0.5)) +
+  scale_x_continuous(limits = c(0, max(brasil_log_data$time) + est_pred_interval), 
+                     breaks = 0:(max(brasil_log_data$time) + est_pred_interval), 
+                     minor_breaks = NULL,
+                     labels = format(seq(brasil_log_data$date[1], by = "days", 
+                                         length.out = nrow(brasil_log_data) + est_pred_interval + 1),
+                                     format = "%d/%m")) +
+  scale_y_continuous(limits = c(NA, max(estimates$y.upr) * 1.2), breaks = br_log_brks, labels = pot10,
+                     minor_breaks = NULL) +
+  labs(x = "Data", y = "Casos (log)") +
+  ggtitle("Comparação da taxa de crescimento em função das medidas de isolamento") +
+  geom_smooth(data = tail(brasil_log_data, nrow(brasil_log_data) - 8), method = "lm",
+              fullrange = TRUE, level = 0.95, formula = y ~ x, size = 0.5, linetype = "f4") +
+  geom_smooth(data = head(brasil_log_data, 9), method = "lm",
+              fullrange = TRUE, level = 0.95, formula = y ~ x, size = 0.5, linetype = "f4") +
+  geom_point(data = brasil_log_data, aes(x = time, y = total_cases)) +
+  geom_vline(xintercept = 2, linetype = "6a") + 
+  annotate("text", x = 2, y = 2, label = "Início das medidas\nde isolamento (SP)",
+           hjust = -0.05) +
+  geom_vline(xintercept = 9, linetype = "6a") + 
+  annotate("text", x = 9, y = 2, label = "Medidas de isolamento\n+7 dias (SP)",
+           hjust = -0.05) +
+  geom_vline(xintercept = 10, linetype = "6a") + 
+  annotate("text", x = 10, y = 2.3, label = "Pronunciamento Bolsonaro",
+           hjust = -0.05) +
+  geom_vline(xintercept = 17, linetype = "6a") + 
+  annotate("text", x = 17, y = 2, label = "Pronunciamento Bolsonaro\n+7 dias",
+           hjust = -0.05) 
 
-#  geom_abline(intercept = -2358.3198853, slope = 0.1287398) +
-#  geom_abline(intercept = -2358.3198853, slope = 0.1288)
+growth_rate <- function(x) {
+  rate <- (x - lag(x)) / lag(x)
+  rate[is.na(rate)] <- 0
+  rate
+}
+
+doubling_time <- function(x) {
+  log(2) / log(1 + growth_rate(x))
+}
+
+doubling_time_lm <- function(x, days = 3) {
+  d <- sapply((days):length(x), function(i) {
+    start <- i - days + 1
+    df <- data.frame(y = log10(x[start:i]), x = 1:days)
+    fit <- lm(y ~ x, data = df)
+    log10(2)/fit$coef[2]
+  })
+  c(rep(0, days - 1), d)
+}
+
+brasil_dbl_time <- brasil %>% filter(location == "Brasil") %>%
+  mutate(dbl_time = doubling_time_lm(total_cases, 5)) %>%
+  filter(total_cases > 100)
+
+brasil_dbl_plot <- brasil_dbl_time %>% 
+  ggplot(aes(x = date, y = dbl_time)) + theme_light() + datastyle +
+  geom_line() + ggtitle("Tempo de duplicação") +
+  scale_y_continuous(breaks = 2:5, labels = 2:5, limits = c(2, 5)) +
+  labs(x = "Data", y = "Tempo de duplicação (dias)")
+  
+brasil_dbl_plot
+
+# Gráficos por estado
 
 ufs <- unique(brasil$location)
 
@@ -394,7 +464,7 @@ dev.off()
 
 ### Óbitos
 
-death_plot <- estados %>% group_by(location) %>% filter(row_number() == n()) %>%
+death_dist_plot <- estados %>% group_by(location) %>% filter(row_number() == n()) %>%
   ggplot(aes(x = reorder(location, -total_deaths), y = total_deaths)) + geom_bar(stat = "identity") +
   geom_text(aes(label = total_deaths), position = position_dodge(width = 0.9), 
             vjust = -0.2, size = 3) +
@@ -404,7 +474,26 @@ death_plot <- estados %>% group_by(location) %>% filter(row_number() == n()) %>%
   annotate("text", x = 27, y = max(estados$total_deaths), 
            label = "Fonte: Ministério da Saúde", hjust = 1, vjust = 1)
 
-death_plot
+death_dist_plot
+
+death_time_data <- brasil %>% filter(location == "Brasil" & total_deaths > 0)
+
+death_time_plot <- death_time_data %>%
+  ggplot(aes(x = date, y = total_deaths)) + datastyle +
+  ggtitle("Óbitos - Brasil") + 
+  labs(y = "Óbitos") +
+  annotate("text", x = death_time_data$date[1], y = max(death_time_data$total_deaths) * 1.01, 
+           label = "Fonte: Ministério da Saúde", hjust = 0, vjust = 0)
+
+death_time_plot
+
+ggsave(paste0("data/Brasil - Óbitos.png"), plot = death_time_plot,
+       device = png(),
+       width = 20,
+       height = 10,
+       units = "cm",
+       dpi = 100)
+dev.off()
 
 avg_death <- full_data %>% filter(total_deaths >= 20) %>%
   mutate(death_ratio = total_deaths / total_cases) %>%
