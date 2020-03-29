@@ -25,8 +25,9 @@ library(gganimate)
 datastyle <- list(theme_light(), geom_line(size = 1), 
                   scale_x_date(date_breaks = "1 day", date_minor_breaks = "1 day",
                                date_labels = "%d/%m"),
-                  theme(axis.text.x = element_text(angle = 45, hjust = 1)),
-                  theme(plot.title = element_text(hjust = 0.5)),
+                  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+                        plot.title = element_text(hjust = 0.5),
+                        plot.margin = margin(0.2, 0.5, 0.2, 0.5, "cm")),
                   labs(x = "Data", y = "Número de Casos"))
 
 
@@ -36,7 +37,8 @@ get_full_data_style <- function(mincases, group = "País") {
        geom_label_repel(aes(label = label), nudge_x = 1, na.rm = TRUE),
        labs(x = "Dia", y = "Número de Casos", colour = group),
        ggtitle(paste("Casos confirmados após o", mincases, "º caso")),
-       theme(plot.title = element_text(hjust = 0.5)),
+       theme(plot.title = element_text(hjust = 0.5),
+             plot.margin = margin(0.2, 0.5, 0.2, 0.5, "cm")),
        scale_x_continuous(breaks = 1:100, minor_breaks = 1:100))
 }
 
@@ -288,8 +290,9 @@ distplot <- estados %>% group_by(location) %>% filter(row_number() == n()) %>%
   geom_text(aes(label = total_cases), position = position_dodge(width = 0.9), 
             vjust = -0.2, size = 3) +
   theme_light() + labs(x = "UF", y = "Casos confirmados") + ggtitle("Distribuição dos casos") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5),
+        plot.margin = margin(0.2, 0.5, 0.2, 0.5, "cm")) +
   annotate("text", x = 27, y = max(estados$total_cases), 
            label = "Fonte: Ministério da Saúde", hjust = 1, vjust = 1) 
 
@@ -322,8 +325,9 @@ cph_plot <- casos_por_hab %>% filter(Estado != "Brasil") %>%
   geom_text(aes(label = round(Casos, 2)), position = position_dodge(width = 0.9),
             vjust = -0.2, size = 3) +
   theme_light() + labs(x = "UF", y = "Casos/(habitantes/100000)") + ggtitle("Casos por 100 mil habitantes") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5),
+        plot.margin = margin(0.2, 0.5, 0.2, 0.5, "cm")) +
   annotate("text", x = 25, y = max(casos_por_hab$Casos),
            label = "Fontes: Ministério da Saúde\nIBGE", hjust = 1, vjust = 1) +
   geom_hline(yintercept = casos_por_hab_br, linetype = "dashed") +
@@ -385,7 +389,7 @@ full_data <- full_join(full_data, filter(brasil, location == "Brasil"))
 
 compare <- c("Brasil", "Italy", "United States", "Spain", "France",
              "South Korea", "Germany", "United Kingdom")
-maxday <- 20
+maxday <- 25
 mincases <- 100
 full_data_style <- get_full_data_style(mincases)
 
@@ -469,8 +473,9 @@ death_dist_plot <- estados %>% group_by(location) %>% filter(row_number() == n()
   geom_text(aes(label = total_deaths), position = position_dodge(width = 0.9), 
             vjust = -0.2, size = 3) +
   theme_light() + labs(x = "UF", y = "Óbitos confirmados") + ggtitle("Distribuição dos óbitos") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5),
+        plot.margin = margin(0.2, 0.5, 0.2, 0.5, "cm")) +
   annotate("text", x = 27, y = max(estados$total_deaths), 
            label = "Fonte: Ministério da Saúde", hjust = 1, vjust = 1)
 
@@ -514,9 +519,10 @@ death_comp_plot <- death_comp %>%
   geom_text(aes(label = paste0(round(death_ratio * 100, 2), "%")) , position = position_dodge(width = 0.9), 
             vjust = -0.2, size = 3) +
   scale_y_continuous(breaks = seq(0, 0.1, 0.025), labels = paste0(seq(0, 10, 2.5), "%")) +
-  theme_light() + labs(x = "País", y = "Letalidade") + ggtitle("Letalidade") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  theme(plot.title = element_text(hjust = 0.5)) +
+  theme_light() + labs(x = "País", y = "Letalidade (CFR)") + ggtitle("Letalidade") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5),
+        plot.margin = margin(0.2, 0.5, 0.2, 0.5, "cm")) +
   annotate("text", x = nrow(death_comp) + 0.5, y = avg_death,
            label = paste("Letalidade média (n >= 20):", avg_death * 100, "%"), 
            hjust = 1, vjust = -0.25) +
@@ -524,7 +530,7 @@ death_comp_plot <- death_comp %>%
            label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde", 
            hjust = 1, vjust = 1) 
 
-death_comp_plot
+death_comp_plot 
 
 ggsave(paste0("data/Letalidade.png"), plot = death_comp_plot,
        device = png(),
@@ -541,7 +547,7 @@ png("data/Instagram.png",
     height = 10,
     units = "cm",
     res = 100)
-par(mar = c(3, 3, 3, 3), xpd = TRUE)
+par(mar = c(3, 4, 3, 4), xpd = TRUE)
 plot(0:10, rng_dat, xaxt = "n", yaxt = "n", frame.plot = TRUE,
      type = "b", xlab = NA, ylab = NA, 
      xlim = c(0, 10), ylim = c(0, 10))
