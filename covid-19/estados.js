@@ -4733,7 +4733,7 @@ var estados = [
     "total_cases": 164,
     "total_deaths": 1,
     "new_cases": 12,
-    "new_deaths": 0
+    "new_deaths": 1
   },
   {
     "date": "2020-03-17",
@@ -6907,6 +6907,870 @@ var estados = [
     "date": "2020-03-27",
     "location": "Tocantins",
     "total_cases": 8,
+    "total_deaths": 0,
+    "new_cases": 1,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Acre",
+    "total_cases": 25,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Alagoas",
+    "total_cases": 14,
+    "total_deaths": 0,
+    "new_cases": 3,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Amapá",
+    "total_cases": 4,
+    "total_deaths": 0,
+    "new_cases": 2,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Amazonas",
+    "total_cases": 111,
+    "total_deaths": 1,
+    "new_cases": 30,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Bahia",
+    "total_cases": 128,
+    "total_deaths": 0,
+    "new_cases": 13,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Ceará",
+    "total_cases": 314,
+    "total_deaths": 4,
+    "new_cases": 32,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Distrito Federal",
+    "total_cases": 260,
+    "total_deaths": 0,
+    "new_cases": 30,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Espírito Santo",
+    "total_cases": 53,
+    "total_deaths": 0,
+    "new_cases": 6,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Goiás",
+    "total_cases": 56,
+    "total_deaths": 1,
+    "new_cases": 7,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Maranhão",
+    "total_cases": 14,
+    "total_deaths": 0,
+    "new_cases": 1,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Mato Grosso",
+    "total_cases": 13,
+    "total_deaths": 0,
+    "new_cases": 2,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Mato Grosso do Sul",
+    "total_cases": 31,
+    "total_deaths": 0,
+    "new_cases": 3,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Minas Gerais",
+    "total_cases": 205,
+    "total_deaths": 0,
+    "new_cases": 16,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Pará",
+    "total_cases": 17,
+    "total_deaths": 0,
+    "new_cases": 4,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Paraíba",
+    "total_cases": 14,
+    "total_deaths": 0,
+    "new_cases": 5,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Paraná",
+    "total_cases": 133,
+    "total_deaths": 2,
+    "new_cases": 14,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Pernambuco",
+    "total_cases": 68,
+    "total_deaths": 5,
+    "new_cases": 12,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Piauí",
+    "total_cases": 11,
+    "total_deaths": 1,
+    "new_cases": 2,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Rio de Janeiro",
+    "total_cases": 558,
+    "total_deaths": 13,
+    "new_cases": 65,
+    "new_deaths": 3
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Rio Grande do Norte",
+    "total_cases": 45,
+    "total_deaths": 0,
+    "new_cases": 17,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Rio Grande do Sul",
+    "total_cases": 197,
+    "total_deaths": 2,
+    "new_cases": 2,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Rondônia",
+    "total_cases": 6,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Roraima",
+    "total_cases": 12,
+    "total_deaths": 0,
+    "new_cases": 2,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Santa Catarina",
+    "total_cases": 184,
+    "total_deaths": 1,
+    "new_cases": 35,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "São Paulo",
+    "total_cases": 1406,
+    "total_deaths": 84,
+    "new_cases": 183,
+    "new_deaths": 16
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Sergipe",
+    "total_cases": 16,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-28",
+    "location": "Tocantins",
+    "total_cases": 9,
+    "total_deaths": 0,
+    "new_cases": 1,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Acre",
+    "total_cases": 34,
+    "total_deaths": 0,
+    "new_cases": 9,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Alagoas",
+    "total_cases": 17,
+    "total_deaths": 0,
+    "new_cases": 3,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Amapá",
+    "total_cases": 4,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Amazonas",
+    "total_cases": 140,
+    "total_deaths": 1,
+    "new_cases": 29,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Bahia",
+    "total_cases": 154,
+    "total_deaths": 1,
+    "new_cases": 26,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Ceará",
+    "total_cases": 348,
+    "total_deaths": 5,
+    "new_cases": 34,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Distrito Federal",
+    "total_cases": 289,
+    "total_deaths": 1,
+    "new_cases": 29,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Espírito Santo",
+    "total_cases": 60,
+    "total_deaths": 0,
+    "new_cases": 7,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Goiás",
+    "total_cases": 58,
+    "total_deaths": 1,
+    "new_cases": 2,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Maranhão",
+    "total_cases": 16,
+    "total_deaths": 0,
+    "new_cases": 2,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Mato Grosso",
+    "total_cases": 16,
+    "total_deaths": 0,
+    "new_cases": 3,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Mato Grosso do Sul",
+    "total_cases": 36,
+    "total_deaths": 0,
+    "new_cases": 5,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Minas Gerais",
+    "total_cases": 231,
+    "total_deaths": 0,
+    "new_cases": 26,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Pará",
+    "total_cases": 18,
+    "total_deaths": 0,
+    "new_cases": 1,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Paraíba",
+    "total_cases": 14,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Paraná",
+    "total_cases": 148,
+    "total_deaths": 2,
+    "new_cases": 15,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Pernambuco",
+    "total_cases": 73,
+    "total_deaths": 5,
+    "new_cases": 5,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Piauí",
+    "total_cases": 14,
+    "total_deaths": 1,
+    "new_cases": 3,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Rio de Janeiro",
+    "total_cases": 600,
+    "total_deaths": 17,
+    "new_cases": 42,
+    "new_deaths": 4
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Rio Grande do Norte",
+    "total_cases": 68,
+    "total_deaths": 1,
+    "new_cases": 23,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Rio Grande do Sul",
+    "total_cases": 226,
+    "total_deaths": 2,
+    "new_cases": 29,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Rondônia",
+    "total_cases": 6,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Roraima",
+    "total_cases": 16,
+    "total_deaths": 0,
+    "new_cases": 4,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Santa Catarina",
+    "total_cases": 194,
+    "total_deaths": 1,
+    "new_cases": 10,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "São Paulo",
+    "total_cases": 1451,
+    "total_deaths": 98,
+    "new_cases": 45,
+    "new_deaths": 14
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Sergipe",
+    "total_cases": 16,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-29",
+    "location": "Tocantins",
+    "total_cases": 9,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Acre",
+    "total_cases": 42,
+    "total_deaths": 0,
+    "new_cases": 8,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Alagoas",
+    "total_cases": 17,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Amapá",
+    "total_cases": 8,
+    "total_deaths": 0,
+    "new_cases": 4,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Amazonas",
+    "total_cases": 151,
+    "total_deaths": 1,
+    "new_cases": 11,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Bahia",
+    "total_cases": 176,
+    "total_deaths": 1,
+    "new_cases": 22,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Ceará",
+    "total_cases": 372,
+    "total_deaths": 5,
+    "new_cases": 24,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Distrito Federal",
+    "total_cases": 312,
+    "total_deaths": 1,
+    "new_cases": 23,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Espírito Santo",
+    "total_cases": 72,
+    "total_deaths": 0,
+    "new_cases": 12,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Goiás",
+    "total_cases": 61,
+    "total_deaths": 1,
+    "new_cases": 3,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Maranhão",
+    "total_cases": 23,
+    "total_deaths": 1,
+    "new_cases": 7,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Mato Grosso",
+    "total_cases": 18,
+    "total_deaths": 0,
+    "new_cases": 2,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Mato Grosso do Sul",
+    "total_cases": 44,
+    "total_deaths": 0,
+    "new_cases": 8,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Minas Gerais",
+    "total_cases": 261,
+    "total_deaths": 1,
+    "new_cases": 30,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Pará",
+    "total_cases": 21,
+    "total_deaths": 0,
+    "new_cases": 3,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Paraíba",
+    "total_cases": 15,
+    "total_deaths": 0,
+    "new_cases": 1,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Paraná",
+    "total_cases": 155,
+    "total_deaths": 3,
+    "new_cases": 7,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Pernambuco",
+    "total_cases": 78,
+    "total_deaths": 6,
+    "new_cases": 5,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Piauí",
+    "total_cases": 16,
+    "total_deaths": 3,
+    "new_cases": 2,
+    "new_deaths": 2
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Rio de Janeiro",
+    "total_cases": 657,
+    "total_deaths": 18,
+    "new_cases": 57,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Rio Grande do Norte",
+    "total_cases": 77,
+    "total_deaths": 1,
+    "new_cases": 9,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Rio Grande do Sul",
+    "total_cases": 241,
+    "total_deaths": 3,
+    "new_cases": 15,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Rondônia",
+    "total_cases": 6,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Roraima",
+    "total_cases": 16,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Santa Catarina",
+    "total_cases": 197,
+    "total_deaths": 1,
+    "new_cases": 3,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "São Paulo",
+    "total_cases": 1517,
+    "total_deaths": 113,
+    "new_cases": 66,
+    "new_deaths": 15
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Sergipe",
+    "total_cases": 16,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-30",
+    "location": "Tocantins",
+    "total_cases": 10,
+    "total_deaths": 0,
+    "new_cases": 1,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Acre",
+    "total_cases": 42,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Alagoas",
+    "total_cases": 18,
+    "total_deaths": 1,
+    "new_cases": 1,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Amapá",
+    "total_cases": 10,
+    "total_deaths": 0,
+    "new_cases": 2,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Amazonas",
+    "total_cases": 175,
+    "total_deaths": 3,
+    "new_cases": 24,
+    "new_deaths": 2
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Bahia",
+    "total_cases": 213,
+    "total_deaths": 2,
+    "new_cases": 37,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Ceará",
+    "total_cases": 390,
+    "total_deaths": 7,
+    "new_cases": 18,
+    "new_deaths": 2
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Distrito Federal",
+    "total_cases": 332,
+    "total_deaths": 3,
+    "new_cases": 20,
+    "new_deaths": 2
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Espírito Santo",
+    "total_cases": 84,
+    "total_deaths": 0,
+    "new_cases": 12,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Goiás",
+    "total_cases": 65,
+    "total_deaths": 1,
+    "new_cases": 4,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Maranhão",
+    "total_cases": 31,
+    "total_deaths": 1,
+    "new_cases": 8,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Mato Grosso",
+    "total_cases": 25,
+    "total_deaths": 0,
+    "new_cases": 7,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Mato Grosso do Sul",
+    "total_cases": 48,
+    "total_deaths": 1,
+    "new_cases": 4,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Minas Gerais",
+    "total_cases": 275,
+    "total_deaths": 2,
+    "new_cases": 14,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Pará",
+    "total_cases": 32,
+    "total_deaths": 0,
+    "new_cases": 11,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Paraíba",
+    "total_cases": 17,
+    "total_deaths": 0,
+    "new_cases": 2,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Paraná",
+    "total_cases": 179,
+    "total_deaths": 3,
+    "new_cases": 24,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Pernambuco",
+    "total_cases": 87,
+    "total_deaths": 6,
+    "new_cases": 9,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Piauí",
+    "total_cases": 18,
+    "total_deaths": 4,
+    "new_cases": 2,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Rio de Janeiro",
+    "total_cases": 708,
+    "total_deaths": 23,
+    "new_cases": 51,
+    "new_deaths": 5
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Rio Grande do Norte",
+    "total_cases": 82,
+    "total_deaths": 1,
+    "new_cases": 5,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Rio Grande do Sul",
+    "total_cases": 274,
+    "total_deaths": 4,
+    "new_cases": 33,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Rondônia",
+    "total_cases": 8,
+    "total_deaths": 1,
+    "new_cases": 2,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Roraima",
+    "total_cases": 16,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Santa Catarina",
+    "total_cases": 219,
+    "total_deaths": 2,
+    "new_cases": 22,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-03-31",
+    "location": "São Paulo",
+    "total_cases": 2339,
+    "total_deaths": 136,
+    "new_cases": 822,
+    "new_deaths": 23
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Sergipe",
+    "total_cases": 19,
+    "total_deaths": 0,
+    "new_cases": 3,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-03-31",
+    "location": "Tocantins",
+    "total_cases": 11,
     "total_deaths": 0,
     "new_cases": 1,
     "new_deaths": 0

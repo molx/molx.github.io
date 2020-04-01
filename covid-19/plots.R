@@ -1,9 +1,6 @@
 library(readr)
 library(readxl)
-library(dplyr)
-library(tidyr)
-library(tibble)
-library(ggplot2)
+library(tidyverse)
 library(grid)
 library(ggrepel)
 library(gganimate)
@@ -22,7 +19,7 @@ library(gganimate)
 #   mutate(Date = as.Date(Date, format = "%m/%d/%y"), New = Cases - lag(Cases)) %>%
 #   tail(-29)
 
-datastyle <- list(theme_light(), geom_line(size = 1), 
+datastyle <- list(theme_light(), geom_line(size = 1), geom_point(),
                   scale_x_date(date_breaks = "1 day", date_minor_breaks = "1 day",
                                date_labels = "%d/%m"),
                   theme(axis.text.x = element_text(angle = 45, hjust = 1),
@@ -71,6 +68,9 @@ growth_line <- function(factor, time, duration) {
 # Calculate 10 power to use in log scale labels
 pot10 <- function(x) {10 ^ x}
 
+# Use pot10 to create strings formatted for the axis label
+pot10l <- function(x) {format(pot10(x), scientific = FALSE, big.mark = ",")}
+
 growth_line_log <- function(factor, time, duration) {
   x <- duration
   y <- duration * log10(factor) / time
@@ -92,13 +92,11 @@ estados <- full_join(casos, mortes) %>% group_by(location) %>%
 
 estados %>% filter(location == "São Paulo") %>% tail
 
-write_excel_csv(estados, path = "data/estados.csv")
+#write_excel_csv(estados, path = "data/estados.csv")
 
 writeLines(paste("var estados =",
                  toJSON(estados, pretty = TRUE)),
            con = "estados.js")
-
-
 
 brasil <- estados %>% group_by(date) %>%
   summarise_if(is.numeric, sum) %>% 
@@ -136,15 +134,16 @@ ablines <- lapply(1:5, function(dbl_time) {
 #   geom_abline(linetype = i, slope = slopes[i], intercept = intcpt)
 # })
 
-br_log_brks <- log10(c(seq(2.5e2, 1e3, 2.5e2), seq(2.5e3, 1e4, 2.5e3), seq(2.5e4, 1e5, 2.5e4)))
+br_log_brks <- unlist(lapply(2:5, function(i) log10(c(1*10^i, 2*10^i, 5*10^i))))
 
 brasil_log_plot + theme_light() + #datastyle + # ablines + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(hjust = 0.5)) +
   geom_abline(aes(intercept = a, slope = b, linetype = factor(style)), data = ablines) +
-  scale_x_continuous(limits = c(0, 15), breaks = seq_along(brasil_log_data$time), 
+  scale_x_continuous(limits = c(0, nrow(brasil_log_data) + 2), breaks = seq_along(brasil_log_data$time), 
                      minor_breaks = NULL,
                      labels = format(brasil_log_data$date, format = "%d/%m")) +
-  scale_y_continuous(limits = c(NA, 4), breaks = br_log_brks, labels = pot10) +
+  scale_y_continuous(limits = c(NA, 4), breaks = br_log_brks, labels = pot10,
+                     minor_breaks = NULL) +
   labs(x = "Data", y = "Casos Confirmados (log)", linetype = "Dias para\ndobrar")
 
 next_day <- nrow(brasil_log_data) + 1
@@ -165,7 +164,7 @@ brasil_log_plot + theme_light() + #datastyle + # ablines +
                      labels = format(seq(brasil_log_data$date[1], by = "days", 
                                          length.out = nrow(brasil_log_data) + est_pred_interval + 1),
                                      format = "%d/%m")) +
-  scale_y_continuous(limits = c(NA, max(estimates$y.upr) * 1.1), breaks = br_log_brks, labels = pot10,
+  scale_y_continuous(limits = c(NA, max(estimates$y.upr) * 1.1), breaks = br_log_brks, labels = pot10l,
                      minor_breaks = NULL) +
   labs(x = "Data", y = "Casos (log)") +
   ggtitle(paste("Previsão de casos de acordo com últimos", est_ref_interval, "dias")) +
@@ -191,7 +190,7 @@ brasil_log_plot + theme_light() + #datastyle + # ablines +
                      labels = format(seq(brasil_log_data$date[1], by = "days", 
                                          length.out = nrow(brasil_log_data) + est_pred_interval + 1),
                                      format = "%d/%m")) +
-  scale_y_continuous(limits = c(NA, max(estimates$y.upr) * 1.2), breaks = br_log_brks, labels = pot10,
+  scale_y_continuous(limits = c(NA, NA), breaks = br_log_brks, labels = pot10l,
                      minor_breaks = NULL) +
   labs(x = "Data", y = "Casos (log)") +
   ggtitle("Comparação da taxa de crescimento em função das medidas de isolamento") +
@@ -227,20 +226,31 @@ doubling_time_lm <- function(x, days = 3) {
   d <- sapply((days):length(x), function(i) {
     start <- i - days + 1
     df <- data.frame(y = log10(x[start:i]), x = 1:days)
-    fit <- lm(y ~ x, data = df)
+    fit <- lm(y ~ x, data = df, weights = sqrt(seq_along(x)))
     log10(2)/fit$coef[2]
   })
   c(rep(0, days - 1), d)
 }
 
+
+dobling_time_lookup <- function(cases) {
+  # Dobling time calculated by looking up the nearest day when # of cases was half of that day,
+  # then calculating how far off the actual half that day was and using that as a factor
+  # to adjust the actual amount of days it took to double
+  halves <- cases/2
+  ids <- sapply(cases, function(i) tail(which(abs(i/2 - cases) == min(abs(i/2 - cases))), 1))
+  (halves/(cases - cases[ids])) * (seq_along(cases) - ids)
+}
+
 brasil_dbl_time <- brasil %>% filter(location == "Brasil") %>%
-  mutate(dbl_time = doubling_time_lm(total_cases, 5)) %>%
+  mutate(dbl_time = doubling_time_lm(total_cases, 5),
+         dbl_time2 = dobling_time_lookup(total_cases)) %>%
   filter(total_cases > 100)
 
 brasil_dbl_plot <- brasil_dbl_time %>% 
   ggplot(aes(x = date, y = dbl_time)) + theme_light() + datastyle +
   geom_line() + ggtitle("Tempo de duplicação") +
-  scale_y_continuous(breaks = 2:5, labels = 2:5, limits = c(2, 5)) +
+  scale_y_continuous(breaks = 2:7, labels = 2:7, limits = c(1.8, 6.5)) +
   labs(x = "Data", y = "Tempo de duplicação (dias)")
   
 brasil_dbl_plot
@@ -258,16 +268,21 @@ for (uf in ufs) {
                        limits = c(min(tot_range), max(tot_range) * 1.05)) + 
     ggtitle(paste("Casos Confirmados -", uf)) + 
     annotate("text", x = ts$date[1], y = max(ts$total_cases) * 1.01, 
-             label = "Fonte: Ministério da Saúde", hjust = 0, vjust = 0)
+             label = "Fonte: Ministério da Saúde", hjust = 0, vjust = 0) +
+    annotate("text", x = max(ts$date), y = max(ts$total_cases), 
+             label = max(ts$total_cases), hjust = 1.1)
   
-  
+  p1
   tot_range_new <- seq(min(ts$new_cases), max(ts$new_cases))  
   p2 <- ggplot(ts, aes(x = date, y = new_cases)) + datastyle +
     scale_y_continuous(breaks = pretty(tot_range_new), 
                        limits = c(min(tot_range_new), max(tot_range_new) * 1.05)) + 
     ggtitle(paste("Novos Casos Confirmados -", uf)) + 
     annotate("text", x = ts$date[1], y = max(ts$new_cases) * 1.01, 
-             label = "Fonte: Ministério da Saúde", hjust = 0, vjust = 0)
+             label = "Fonte: Ministério da Saúde", hjust = 0, vjust = 0) +
+    annotate("text", x = max(ts$date), y = max(ts$new_cases), 
+             label = max(ts$new_cases), hjust = 1.1)
+  p2
   
   ggsave(paste0("data/", uf, "-Total.png"), plot = p1,
          device = png(),
@@ -356,7 +371,7 @@ estado_comp <- estados %>%
   mutate(label = if_else(day == max(day), location, NA_character_),
          total_cases = log10(total_cases))
 
-estado_log_brks <- log10(c(seq(20, 100, 20), seq(200, 500, 100)))
+estado_log_brks <- log10(c(100, seq(250, 1000, 250), seq(1500, 2500, 500)))
 estado_comp_plot <- ggplot(estado_comp, aes(day, total_cases)) + 
   full_data_style +
   labs(y = "Número de Casos (log10)") +
