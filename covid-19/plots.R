@@ -4,6 +4,7 @@ library(tidyverse)
 library(grid)
 library(ggrepel)
 library(gganimate)
+library(jsonlite)
 
 # source <- "Fonte: 2019 Novel Coronavirus COVID-19 (2019-nCoV)\nData Repository by Johns Hopkins CSSE\nhttps://github.com/CSSEGISandData/COVID-19"
 
@@ -79,7 +80,9 @@ growth_line_log <- function(factor, time, duration) {
 
 casos <- read_excel("data/Brasil.xlsx", sheet = "Confirmados") %>%
   mutate(Data = as.Date(Data)) %>% rename(date = Data) %>%
-  pivot_longer(-date, names_to = "location", values_to = "total_cases") 
+  pivot_longer(-date, names_to = "location", values_to = "total_cases")
+
+write_excel_csv(read_excel("data/Brasil.xlsx", sheet = "Confirmados"), path = "data/estados_wide.csv")
 
 mortes <- read_excel("data/Brasil.xlsx", sheet = "Mortes") %>%
   mutate(Data = as.Date(Data)) %>% rename(date = Data) %>%
@@ -158,11 +161,11 @@ estimates <- data.frame(x = next_day:(next_day + est_ref_interval - 1),
 
 brasil_log_plot + theme_light() + #datastyle + # ablines + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(hjust = 0.5)) +
-  scale_x_continuous(limits = c(0, max(brasil_log_data$time) + est_pred_interval), 
-                     breaks = 0:(max(brasil_log_data$time) + est_pred_interval), 
+  scale_x_continuous(limits = c(0, nrow(brasil_log_data) + est_pred_interval),
+                     breaks = seq(1, nrow(brasil_log_data) + est_pred_interval), 
                      minor_breaks = NULL,
                      labels = format(seq(brasil_log_data$date[1], by = "days", 
-                                         length.out = nrow(brasil_log_data) + est_pred_interval + 1),
+                                         length.out = nrow(brasil_log_data) + est_pred_interval),
                                      format = "%d/%m")) +
   scale_y_continuous(limits = c(NA, max(estimates$y.upr) * 1.1), breaks = br_log_brks, labels = pot10l,
                      minor_breaks = NULL) +
@@ -184,11 +187,11 @@ brasil_log_plot + theme_light() + #datastyle + # ablines +
 
 brasil_log_plot + theme_light() + #datastyle + # ablines + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(hjust = 0.5)) +
-  scale_x_continuous(limits = c(0, max(brasil_log_data$time) + est_pred_interval), 
-                     breaks = 0:(max(brasil_log_data$time) + est_pred_interval), 
+  scale_x_continuous(limits = c(0, nrow(brasil_log_data) + est_pred_interval),
+                     breaks = seq(1, nrow(brasil_log_data) + est_pred_interval), 
                      minor_breaks = NULL,
                      labels = format(seq(brasil_log_data$date[1], by = "days", 
-                                         length.out = nrow(brasil_log_data) + est_pred_interval + 1),
+                                         length.out = nrow(brasil_log_data) + est_pred_interval),
                                      format = "%d/%m")) +
   scale_y_continuous(limits = c(NA, NA), breaks = br_log_brks, labels = pot10l,
                      minor_breaks = NULL) +
@@ -539,7 +542,7 @@ death_comp_plot <- death_comp %>%
         plot.title = element_text(hjust = 0.5),
         plot.margin = margin(0.2, 0.5, 0.2, 0.5, "cm")) +
   annotate("text", x = nrow(death_comp) + 0.5, y = avg_death,
-           label = paste("Letalidade média (n >= 20):", avg_death * 100, "%"), 
+           label = paste("Média (n >= 20):", avg_death * 100, "%"), 
            hjust = 1, vjust = -0.25) +
   annotate("text", x = nrow(death_comp) + 0.5, y = 0.09, 
            label = "Fontes: https://ourworldindata.org/coronavirus\nMinistério da Saúde", 
