@@ -7990,5 +7990,221 @@ var estados = [
     "total_deaths": 0,
     "new_cases": 1,
     "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Acre",
+    "total_cases": 43,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Alagoas",
+    "total_cases": 18,
+    "total_deaths": 1,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Amapá",
+    "total_cases": 11,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Amazonas",
+    "total_cases": 229,
+    "total_deaths": 3,
+    "new_cases": 29,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Bahia",
+    "total_cases": 267,
+    "total_deaths": 3,
+    "new_cases": 21,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Ceará",
+    "total_cases": 550,
+    "total_deaths": 20,
+    "new_cases": 106,
+    "new_deaths": 12
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Distrito Federal",
+    "total_cases": 370,
+    "total_deaths": 4,
+    "new_cases": 15,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Espírito Santo",
+    "total_cases": 120,
+    "total_deaths": 1,
+    "new_cases": 24,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Goiás",
+    "total_cases": 73,
+    "total_deaths": 1,
+    "new_cases": 2,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Maranhão",
+    "total_cases": 71,
+    "total_deaths": 1,
+    "new_cases": 17,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Mato Grosso",
+    "total_cases": 36,
+    "total_deaths": 0,
+    "new_cases": 9,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Mato Grosso do Sul",
+    "total_cases": 53,
+    "total_deaths": 1,
+    "new_cases": 2,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Minas Gerais",
+    "total_cases": 370,
+    "total_deaths": 4,
+    "new_cases": 56,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Pará",
+    "total_cases": 46,
+    "total_deaths": 1,
+    "new_cases": 6,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Paraíba",
+    "total_cases": 21,
+    "total_deaths": 1,
+    "new_cases": 1,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Paraná",
+    "total_cases": 252,
+    "total_deaths": 4,
+    "new_cases": 28,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Pernambuco",
+    "total_cases": 106,
+    "total_deaths": 9,
+    "new_cases": 11,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Piauí",
+    "total_cases": 19,
+    "total_deaths": 4,
+    "new_cases": 1,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Rio de Janeiro",
+    "total_cases": 992,
+    "total_deaths": 41,
+    "new_cases": 160,
+    "new_deaths": 13
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Rio Grande do Norte",
+    "total_cases": 105,
+    "total_deaths": 2,
+    "new_cases": 13,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Rio Grande do Sul",
+    "total_cases": 334,
+    "total_deaths": 5,
+    "new_cases": 28,
+    "new_deaths": 1
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Rondônia",
+    "total_cases": 10,
+    "total_deaths": 1,
+    "new_cases": 1,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Roraima",
+    "total_cases": 26,
+    "total_deaths": 0,
+    "new_cases": 4,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Santa Catarina",
+    "total_cases": 247,
+    "total_deaths": 2,
+    "new_cases": 12,
+    "new_deaths": 0
+  },
+  {
+    "date": "2020-04-02",
+    "location": "São Paulo",
+    "total_cases": 3506,
+    "total_deaths": 188,
+    "new_cases": 525,
+    "new_deaths": 24
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Sergipe",
+    "total_cases": 23,
+    "total_deaths": 2,
+    "new_cases": 3,
+    "new_deaths": 2
+  },
+  {
+    "date": "2020-04-02",
+    "location": "Tocantins",
+    "total_cases": 12,
+    "total_deaths": 0,
+    "new_cases": 0,
+    "new_deaths": 0
   }
 ]

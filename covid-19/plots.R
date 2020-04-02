@@ -283,7 +283,7 @@ for (uf in ufs) {
     ggtitle(paste("Novos Casos Confirmados -", uf)) + 
     annotate("text", x = ts$date[1], y = max(ts$new_cases) * 1.01, 
              label = "Fonte: Ministério da Saúde", hjust = 0, vjust = 0) +
-    annotate("text", x = max(ts$date), y = max(ts$new_cases), 
+    annotate("text", x = max(ts$date), y = last(ts$new_cases), 
              label = max(ts$new_cases), hjust = 1.1)
   p2
   
