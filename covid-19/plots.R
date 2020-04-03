@@ -4,7 +4,7 @@ library(tidyverse)
 library(grid)
 library(ggrepel)
 library(gganimate)
-library(jsonlite)
+
 
 # source <- "Fonte: 2019 Novel Coronavirus COVID-19 (2019-nCoV)\nData Repository by Johns Hopkins CSSE\nhttps://github.com/CSSEGISandData/COVID-19"
 
@@ -96,10 +96,6 @@ estados <- full_join(casos, mortes) %>% group_by(location) %>%
 estados %>% filter(location == "São Paulo") %>% tail
 
 #write_excel_csv(estados, path = "data/estados.csv")
-
-writeLines(paste("var estados =",
-                 toJSON(estados, pretty = TRUE)),
-           con = "estados.js")
 
 brasil <- estados %>% group_by(date) %>%
   summarise_if(is.numeric, sum) %>% 

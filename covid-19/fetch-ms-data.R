@@ -4,6 +4,7 @@ library(tidyverse)
 library(readr)
 library(readxl)
 library(WriteXLS)
+library(jsonlite)
 
 url <- "https://xx9p7hp1p7.execute-api.us-east-1.amazonaws.com/prod/PortalMapa"
 res <- GET(url, add_headers("x-parse-application-id" = "unAFkcaNDeXajurGB7LChj8SgQYS2ptm"))
@@ -48,4 +49,16 @@ if (all(sort(last_ms_data$total_cases) == sort(last_saved_day$total_cases))) {
   WriteXLS(x = list(exceldata_cases, exceldata_deaths, pop),
            ExcelFileName = "data/Brasil.xlsx",
            SheetNames = c("Confirmados", "Mortes", "Populacao"))
+  
+  cat("Saving JS file...\n\n")
+  
+  writeLines(paste("var estados =",
+                   toJSON(estados, pretty = FALSE)),
+             con = "estados.js")
+  
 }
+
+writeLines(paste("var populacao =",
+                 toJSON(pop %>% pivot_wider(names_from = UF, values_from = População),
+                        pretty = FALSE)),
+           con = "populacao.js")
