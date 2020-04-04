@@ -35,19 +35,19 @@ function formatToChart(data, value, x = "date") {
 function formatToColumnChart(data, category, value) {
     //const locations = [...new Set(data.map(item => item.location))];
     let out = [{data: []}];
-    let colors = palette("mpn65", data.length - 1);
+    //let colors = palette("mpn65", data.length - 1);
     const total = Object.values(data).reduce((a, b) => +a + b[value], 0);
     for (i = 0; i < data.length; i++) {
     //data.forEach(function(cat) {
         let pct = Math.round(10000 * data[i][value] / total)/100;
-        out[0].data.push({name:data[i][category], y:data[i][value], color:"#" + colors[i], pct:pct});        
+        out[0].data.push({name:data[i][category], y:data[i][value], color:myColors[i], pct:pct});        
     }
     out[0].data.sort((a, b) => parseFloat(b.y) - parseFloat(a.y));
     let catOrder = [...new Set(out[0].data.map(item => item.name))];
     return {series:out, order:catOrder};
 }
 
-function summarise(data, group, value, newkey, newvalue) {
+function summarise(data, group, value, newkey, newvalue, usechange = false) {
     sums = {};
     for (let i = 0; i < data.length; i++) {
         if(!sums[data[i][group]]) {
@@ -61,9 +61,13 @@ function summarise(data, group, value, newkey, newvalue) {
     for (i = 0; i < Object.keys(sums).length; i++) {
         let newElement = Object.assign({}, element);        
         let key = Object.keys(sums)[i];
-        newElement[group] = key;
-        newElement[value] = sums[key];
-        newElement[newkey] = newvalue;
+        newElement[group] = key;        
+        newElement[newkey] = newvalue;        
+        if (!usechange) {
+            newElement[value] = sums[key];
+        } else {
+            newElement[value] = i > 0 ? Math.round(100 * 100 * (sums[key] - sums[Object.keys(sums)[i - 1]])/sums[Object.keys(sums)[i - 1]])/100 : 0;
+        }
         out.push(newElement);
     }
     return out;
@@ -115,7 +119,8 @@ var nomesEstados = Object.keys(acronyms).sort();
 
 regioes["Brasil"] = nomesEstados;
 
-//[{"name:Series", data:[173,407,412,351,470,296,560,829,684,531,371,454,182]}]
+//Manually add first color to avoid the palette's red as the first and main color.
+var myColors = ["#2b547e"].concat(palette("mpn65", 26).map(c => "#" + c));
 
 var highchartsOptions = Highcharts.setOptions({
       lang: {
@@ -135,18 +140,46 @@ var highchartsOptions = Highcharts.setOptions({
             downloadSVG: "Download imagem SVG",
             numericSymbols: null,
             thousandsSep: ","
-            }
-      }
+        },         
+        chart: {
+            borderWidth: 1,
+            borderColor: "#666666",
+            borderRadius: 10,
+            spacingBottom: 16,
+            backgroundColor: "#FEFEFE",
+            zoomType: "x",
+            resetZoomButton: {
+                position: {
+                    x: -150,
+                    y: 10
+                },
+                relativeTo: "chart",
+                theme: {
+                    height: 14
+                }
+            },
+            panning: true,
+            panKey: "ctrl"
+        },
+        subtitle: {
+            text: "Fonte: Ministério da Saúde",
+            align: "left",
+            verticalAlign: "bottom",
+            floating: true,
+            style: {
+                "margin-top": "-30px"
+            },
+            y: 28
+        },
+        colors: myColors
+    }      
 );
 
 function createLineChart(renderTo) {
-    Highcharts.chart({  
+    Highcharts.chart({ 
         chart: {
             renderTo: renderTo,
-            type: "line",
-            borderWidth: 1,
-            borderColor: "#000",
-            spacingBottom: 20,
+            type: "line",            
             styledMode: false
         },
         data: {
@@ -192,24 +225,13 @@ function createLineChart(renderTo) {
                     s;
                 items.sort(function(a, b){
                     return ((a.y < b.y) ? 1 : ((a.y > b.y) ? -1 : 0));
-                });
-                //items.reverse();
+                });                
                 return tooltip.defaultFormatter.call(this, tooltip);
             }
         },
         title: {
             align: "left"
-        },
-        subtitle: {
-            text: "Fonte: Ministério da Saúde",
-            align: "left",
-            verticalAlign: "bottom",
-            floating: true,
-            style: {
-                "margin-top": "-30px"
-            },
-            y: 32
-        },
+        },        
         defs: {
               custombtn: {        
                 tagName: "pattern",
@@ -248,10 +270,7 @@ function createLineChart(renderTo) {
 function createColumnChart(renderTo, tooltipHelp = null) {
     Highcharts.chart(renderTo, {
         chart: {
-            type: "column",
-            borderWidth: 1,
-            borderColor: "#000",
-            styledMode: false
+            type: "column"            
         },
         plotOptions: {
             series: {
@@ -260,6 +279,7 @@ function createColumnChart(renderTo, tooltipHelp = null) {
             },            
         },
         tooltip: {
+            shared: true,
             formatter: function() {
                 var point = this.point,
                     series = this.series,                    
@@ -267,8 +287,7 @@ function createColumnChart(renderTo, tooltipHelp = null) {
                 pct = this.points[0].point.pct;
                 name = this.points[0].point.name;
                 return "<small>" + name + "</small>:<br><b>" + this.y + "</b> (" + pct + "% dos " + tooltipHelp + ")";
-            },
-            shared: true
+            }
         },
         legend: {
             align: "center",
@@ -293,7 +312,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     
     
-    // Brasil   
+    // Brasil
+    ////Total de casos no Brasil
     createLineChart("br_casos");
     $("#br_casos").highcharts().addSeries({            
         name: "Brasil",
@@ -310,6 +330,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
     
+    ////Total de óbitos no Brasil
     createLineChart("br_obitos");
     $("#br_obitos").highcharts().addSeries({               
         name: "Brasil",
@@ -325,6 +346,107 @@ document.addEventListener("DOMContentLoaded", function () {
             text: "Óbitos"
         }
     });
+    
+    ////Novos casos no Brasil
+    createLineChart("br_novoscasos");
+    $("#br_novoscasos").highcharts().addSeries({            
+        name: "Novos",
+        yAxis: 0,
+        data: formatToChart(summarise(estados, "date", "new_cases", "location", "Novos"), "new_cases")[0].data       
+    }, false);
+    $("#br_novoscasos").highcharts().update({
+        yAxis: {
+            title: {
+                text: "Novos casos",
+                style: {
+                    color: myColors[0]
+                }
+            },
+            labels: {
+                style: {
+                    color: myColors[0]
+                }
+            }
+        },
+        title: {
+            text: "Novos casos"
+        }
+    }, false);
+    $("#br_novoscasos").highcharts().addAxis({        
+        title: {
+            text: "Variação em relação ao dia anterior",
+            style: {
+                color: myColors[1]
+            }
+        },
+        min: 0,
+        max: 100,
+        opposite: true,
+        labels: {
+            format: "{value}%",
+            style: {
+                color: myColors[1]
+            }
+        }
+    }, false);
+    $("#br_novoscasos").highcharts().addSeries({            
+        name: "Aumento",
+        yAxis: 1,
+        data: formatToChart(summarise(estados, "date", "total_cases", "location", "Aumento", true), "total_cases")[0].data,
+        tooltip: {
+            valueSuffix: "%"
+        }
+    }, true);
+    
+    ////Novos óbitos no Brasil
+    createLineChart("br_novosobitos");
+    $("#br_novosobitos").highcharts().addSeries({               
+        name: "Brasil",
+        data: formatToChart(summarise(estados, "date", "new_deaths", "location", "Brasil"), "new_deaths")[0].data       
+    }, false);
+    $("#br_novosobitos").highcharts().update({
+        yAxis: {
+            title: {
+                text: "Novos óbitos",
+                style: {
+                    color: myColors[0]
+                }
+            },
+            labels: {
+                style: {
+                    color: myColors[0]
+                }
+            }
+        },
+        title: {
+            text: "Novos óbitos",
+        }
+    });
+    $("#br_novosobitos").highcharts().addAxis({        
+        title: {
+            text: "Variação em relação ao dia anterior",
+            style: {
+                color: myColors[1]
+            }
+        },
+        min: 0,
+        max: 100,
+        opposite: true,
+        labels: {
+            format: "{value}%",
+            style: {
+                color: myColors[1]
+            }
+        }
+    }, false);
+    $("#br_novosobitos").highcharts().addSeries({            
+        name: "Aumento",
+        yAxis: 1,
+        data: formatToChart(summarise(estados, "date", "total_deaths", "location", "Aumento", true), "total_deaths")[0].data,
+        tooltip: {
+            valueSuffix: "%"
+        }
+    }, true);
     
     let estados_dist_casos = formatToColumnChart(getLastDate(estados, "total_cases"), "location", "total_cases");
     //Object must be cloned so the calculation per hab doesn"t change main object
