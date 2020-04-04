@@ -305,7 +305,9 @@ document.addEventListener("DOMContentLoaded", function () {
     
     nomesEstados.forEach(function(e) {
         $("#sel_estado").append(new Option(e, e));
+        
     });
+    $("#sel_estado").val("Distrito Federal");
     
     ["Sudeste", "Centro-Oeste", "Nordeste", "Sul", "Norte"].forEach(function(e) {
         $("#sel_regiao").append(new Option(e, e));
@@ -831,4 +833,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }            
     });
+    //Hide loading div after all charts are loaded
+    $('#loading, #wall').hide();
 });
