@@ -13,10 +13,11 @@ export default ({ data }) => {
                     algumas coisas sobre desenvolvimento. Nesse site, além dos links para meu currículo e alguns perfis,
                     você vai encontrar também alguns projetos que desenvolvi ao longo destes anos.
                 </p>
-                {data.allProjetosCsv.nodes.map(proj => (
-                    <Projlink data={proj} />
-                ))}
-                <hr />
+                <div className={"projparent"}>
+                    {data.allProjetosCsv.nodes.map(proj => (
+                        <Projlink data={proj} />
+                    ))}
+                </div>
             </Layout>
         </div>
     )

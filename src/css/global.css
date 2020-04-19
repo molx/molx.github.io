@@ -35,8 +35,14 @@ footer {
 
 .inner {
    margin: 0 auto;
-   max-width: 800px;
-   padding: 0;
+   max-width: 1200px;
+   padding: 0 10px;
+}
+
+.projparent { 
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -56,15 +62,4 @@ a {
 
 img {
     box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.5)
-}
-
-.project div {
-    margin-bottom: 0.5rem;
-}
-
-.project_icon {
-    width: 32px;
-    height: 32px;
-    float: left;
-    margin: 0 0.5em 0 0;
 }

@@ -10,7 +10,7 @@ export default ({ data }) => {
             <img
                 alt="Foto de Alan Mól"
                 src={"img/alanmol.jpg"}
-                style={{ float: "right", width: "15%", marginLeft: "2%" }}
+                style={{ float: "right", width: "15%", margin: "0 0 10px 2%", minWidth: "100px" }}
             />
             <p>
                 Me formei em Química pela Universidade de Brasília em 2010, e em 2015 concluí meu mestrado em Química
@@ -19,11 +19,11 @@ export default ({ data }) => {
                 Medicina Veterinária e desde 2016 estou na Central Analítica do Instituto de Química, onde trabalho
                 principalmente com cromatografia e espetrometria de massas.
             </p>
-            <br />
-            {data.allPerfisCsv.nodes.map(proj => (
-                <Projlink data={proj} />
-            ))}
-            <hr />
+            <div className={"projparent"} style={{ clear: "both" }}>
+                {data.allPerfisCsv.nodes.map(proj => (
+                    <Projlink data={proj} />
+                ))}
+            </div>
         </Layout>
     )
 }
