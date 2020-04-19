@@ -1,3 +1,0 @@
-Known bugs:
-
-1. Button inside chart does not keep size if text is smaller than default
