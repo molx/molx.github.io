@@ -1,8 +1,13 @@
 module.exports = {
     siteMetadata: {
         title: `Alan Mól`,
+        titleTemplate: "% - ",
         siteUrl: `http://alanmol.com.br`,
-        description: `Site pessoal de Alan Ribeiro Mól`,
+        url: "http://alanmol.com.br",
+        image: "/img/alanmol.jpg",
+        description: `Site pessoal de Alan Mól`,
+        twitterUsername: "molx",
+        type: "website"
     },
     plugins: [
         {
