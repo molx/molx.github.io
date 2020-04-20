@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[3],{w2l6:function(e,n,t){"use strict";t.r(n);var a=t("q1tI"),l=t.n(a),s=t("Bl7J");n.default=function(e){var n=e.data;return console.log(n),l.a.createElement("div",null,l.a.createElement(s.a,null,l.a.createElement("p",{style:{"font-size":"3em"}},"404"),l.a.createElement("p",null,"Ops! Essa página não existe. :(")))}}}]);
+//# sourceMappingURL=component---src-pages-404-js-dc1d28e465dcbeaf6925.js.map
