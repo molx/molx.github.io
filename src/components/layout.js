@@ -10,7 +10,6 @@ export default ({ children }) => (
         <SEO/>
         <Helmet>
             <meta charSet="utf-8" />
-            <title>Alan Mól</title>
             <link rel="canonical" href="http://alanmol.com.br/" />
         </Helmet>
         <Header/>

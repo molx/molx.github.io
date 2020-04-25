@@ -2,7 +2,7 @@ import React from "react"
 import { Link } from "gatsby"
 import headerStyles from "./header.module.css"
 
-export default ({ children }) => (
+export default () => (
     <div className={headerStyles.header}>
         <header>
             <h1>Alan Ribeiro Mól</h1>
@@ -10,10 +10,10 @@ export default ({ children }) => (
         <div className={"inner"}>
             <div className={headerStyles.nav}>
                 <ul>
-                    <Link to="/">
+                    <Link to="/" activeClassName={headerStyles.active}>
                         <li>Sobre</li>
                     </Link>
-                    <Link to="/projetos">
+                    <Link to="/projetos" activeClassName={headerStyles.active}>
                         <li>Projetos</li>
                     </Link>
                 </ul>

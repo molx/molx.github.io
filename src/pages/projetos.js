@@ -2,11 +2,13 @@ import React from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import Projlink from "../components/projlink"
+import SEO from "../components/SEO"
 
 export default ({ data }) => {
     return (
         <div>
             <Layout>
+                <SEO title={"Projetos"} />
                 <h2>Projetos</h2>
                 <p>
                     Sempre gostei de me aventurar no mundo da computação, e aos trancos e barrancos fui aprendendo
