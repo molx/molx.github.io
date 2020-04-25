@@ -23,6 +23,13 @@ module.exports = {
                 path: `${__dirname}/src/data/`,
             },
         },
+        {
+            resolve: `gatsby-source-filesystem`,
+            options: {
+                name: `blog`,
+                path: `${__dirname}/src/blog`,
+            },
+        },
         `gatsby-transformer-csv`,
         {
             resolve: `gatsby-plugin-google-analytics`,
@@ -30,6 +37,8 @@ module.exports = {
                 trackingId: "UA-60942909-1",
             },
         },
-        `gatsby-plugin-react-helmet`
+        `gatsby-plugin-react-helmet`,
+        `gatsby-transformer-remark`,
+        'gatsby-plugin-slug'
     ],
 }

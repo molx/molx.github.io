@@ -16,6 +16,9 @@ export default () => (
                     <Link to="/projetos" activeClassName={headerStyles.active}>
                         <li>Projetos</li>
                     </Link>
+                    <Link to="/blog" activeClassName={headerStyles.active}>
+                        <li>Blog</li>
+                    </Link>
                 </ul>
             </div>
         </div>
