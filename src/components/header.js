@@ -16,7 +16,7 @@ export default () => (
                     <Link to="/projetos" activeClassName={headerStyles.active}>
                         <li>Projetos</li>
                     </Link>
-                    <Link to="/blog" activeClassName={headerStyles.active}>
+                    <Link to="/blog" activeClassName={headerStyles.active} partiallyActive={true}>
                         <li>Blog</li>
                     </Link>
                 </ul>

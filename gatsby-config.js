@@ -7,7 +7,7 @@ module.exports = {
         image: "/img/alanmol.jpg",
         description: `Site pessoal de Alan Mól`,
         twitterUsername: "molx",
-        type: "website"
+        type: "website",
     },
     plugins: [
         {
@@ -39,6 +39,20 @@ module.exports = {
         },
         `gatsby-plugin-react-helmet`,
         `gatsby-transformer-remark`,
-        'gatsby-plugin-slug'
+        "gatsby-plugin-slug",
+        `gatsby-plugin-sharp`,
+        {
+            resolve: `gatsby-transformer-remark`,
+            options: {
+                plugins: [
+                    {
+                        resolve: `gatsby-remark-images`,
+                        options: {
+                            maxWidth: 800,
+                        },
+                    },
+                ],
+            },
+        }
     ],
 }

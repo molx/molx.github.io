@@ -10,13 +10,15 @@ export default ({ data }) => {
                 <SEO title={"Blog"} />
                 <h2>Últimos posts</h2>
                 {data.allMarkdownRemark.edges.map(({ node }) => (
-                    <div key={node.id}>
-                        <Link to={`/blog/` + node.frontmatter.slug}>
+                    <div key={node.id} style={{marginTop:"2em"}}>
+                        <Link to={`/blog/` + node.frontmatter.slug} style={{color:"#000"}}>
                             <h4>
-                                {node.frontmatter.title} <span>— {node.frontmatter.date}</span>
+                                {node.frontmatter.title}<br/>
+                                <span style={{fontSize:"0.8em"}}>{node.frontmatter.date}</span>
                             </h4>
                             <p>{node.excerpt}</p>
                         </Link>
+                        <hr/>
                     </div>
                 ))}
             </Layout>
