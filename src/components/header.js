@@ -10,15 +10,21 @@ export default () => (
         <div className={"inner"}>
             <div className={headerStyles.nav}>
                 <ul>
-                    <Link to="/" activeClassName={headerStyles.active}>
-                        <li>Sobre</li>
-                    </Link>
-                    <Link to="/projetos" activeClassName={headerStyles.active}>
-                        <li>Projetos</li>
-                    </Link>
-                    <Link to="/blog" activeClassName={headerStyles.active} partiallyActive={true}>
-                        <li>Blog</li>
-                    </Link>
+                    <li>
+                        <Link to="/" activeClassName={headerStyles.active}>
+                            Sobre
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/projetos" activeClassName={headerStyles.active}>
+                            Projetos
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/blog" activeClassName={headerStyles.active} partiallyActive={true}>
+                            Blog
+                        </Link>
+                    </li>
                 </ul>
             </div>
         </div>

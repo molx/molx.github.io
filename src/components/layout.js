@@ -7,12 +7,13 @@ import SEO from "../components/SEO"
 
 export default ({ children }) => (
     <div className={"site"}>
-        <SEO/>
+        <SEO />
         <Helmet>
-            <meta charSet="utf-8" />
+            <meta charset="utf-8" />
+            <html lang="pt" />
             <link rel="canonical" href="http://alanmol.com.br/" />
         </Helmet>
-        <Header/>
+        <Header />
         <div id="main_content">
             <div className={"inner"}>{children}</div>
         </div>

@@ -53,6 +53,19 @@ module.exports = {
                     },
                 ],
             },
-        }
+        },
+        {
+            resolve: `gatsby-plugin-manifest`,
+            options: {
+                name: `Alan Mól`,
+                short_name: `Alan Mól`,
+                start_url: `/`,
+                background_color: `#fcfffc`,
+                theme_color: `#fcfffc`,
+                display: `standalone`,
+                icon: `static/img/favicon.png`,
+            },
+        },
+        `gatsby-plugin-offline`,
     ],
 }
