@@ -15,7 +15,7 @@
     "deploy": "gatsby build && gh-pages -d public -b master"
   },
   "dependencies": {
-    "gatsby": "^2.32.13",
+    "gatsby": "^3.5.0",
     "gatsby-plugin-google-analytics": "^2.11.0",
     "gatsby-plugin-manifest": "^2.12.1",
     "gatsby-plugin-offline": "^3.10.2",
@@ -26,7 +26,7 @@
     "gatsby-remark-images": "^3.11.1",
     "gatsby-source-filesystem": "^2.11.1",
     "gatsby-transformer-csv": "^2.10.0",
-    "gatsby-transformer-remark": "^2.16.1",
+    "gatsby-transformer-remark": "^4.2.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-helmet": "^6.1.0",
