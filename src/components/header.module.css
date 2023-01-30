@@ -16,26 +16,28 @@ header {
 
 .nav {
     margin: 0;
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 400px;
 }
-
+/* 
 .nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-}
+} */
 
-.nav ul li {
+/* .nav div {
     display: inline;
-
     border-width: 0 2px 0 2px;
-    /* border-style: solid;
+    border-style: solid;
     border-color: rgb(0, 0, 0, 0);
-    transition: all 0.3s; */
-}
+    transition: all 0.3s;
+} */
 
-.nav ul a {
-    padding: 0.2em 0.5em 0.2em 0.5em;
-    margin-right: 2em;
+.nav div a {
+    padding: 0.2em 0.5em 0.2em 0.5em;    
     text-shadow: 1px 1px 2px black;
     font-weight: bold;
     font-size: 1.2em;
@@ -47,10 +49,10 @@ header {
     background-position: bottom, left, top, right;
     transition: all 0.5s ease;
 }
-.nav ul a:not(.active) {
+.nav div a:not(.active) {
     background-size: 0 1px, 1px 0, 0 1px, 1px 0;
 }
-.nav ul a:hover {
+.nav div a:hover {
     background-size: 80% 1px, 1px 80%, 80% 1px, 1px 80%;
 }
 

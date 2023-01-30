@@ -9,23 +9,21 @@ const Header = () => (
         </header>
         <div className={"inner"}>
             <div className={headerStyles.nav}>
-                <ul>
-                    <li>
-                        <Link to="/" activeClassName={headerStyles.active}>
-                            Sobre
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="/projetos" activeClassName={headerStyles.active}>
-                            Projetos
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="/blog" activeClassName={headerStyles.active} partiallyActive={true}>
-                            Blog
-                        </Link>
-                    </li>
-                </ul>
+                <div>
+                    <Link to="/" activeClassName={headerStyles.active}>
+                        Sobre
+                    </Link>
+                </div>
+                <div>
+                    <Link to="/projetos" activeClassName={headerStyles.active}>
+                        Projetos
+                    </Link>
+                </div>
+                <div>
+                    <Link to="/blog" activeClassName={headerStyles.active} partiallyActive={true}>
+                        Blog
+                    </Link>
+                </div>
             </div>
         </div>
     </div>
