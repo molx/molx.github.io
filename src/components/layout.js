@@ -1,5 +1,4 @@
-import React from "react"
-import { Helmet } from "react-helmet"
+import * as React from "react"
 import Header from "../components/header"
 import Seo from "../components/SEO"
 
@@ -8,11 +7,6 @@ import Seo from "../components/SEO"
 const Layout = ({ children }) => (
     <div className={"site"}>
         <Seo />
-        <Helmet>
-            <meta charset="utf-8" />
-            <html lang="pt" />
-            <link rel="canonical" href="http://alanmol.com.br/" />
-        </Helmet>
         <Header />
         <div id="main_content">
             <div className={"inner"}>{children}</div>
@@ -21,3 +15,13 @@ const Layout = ({ children }) => (
     </div>
 )
 export default Layout;
+
+export function Head() {
+    return (
+        <>
+            <meta charset="utf-8" />
+            <html lang="pt" />
+            <link rel="canonical" href="http://alanmol.com.br/" />
+        </>
+    )
+}
