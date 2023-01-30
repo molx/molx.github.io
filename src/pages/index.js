@@ -3,7 +3,7 @@ import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import Projlink from "../components/projlink"
 
-export default ({ data }) => {
+const Index = ({ data }) => {
     return (
         <Layout>
             <h2>Sobre</h2>
@@ -27,7 +27,7 @@ export default ({ data }) => {
         </Layout>
     )
 }
-
+export default Index;
 export const query = graphql`
     query {
         allPerfisCsv {

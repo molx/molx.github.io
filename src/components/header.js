@@ -1,8 +1,8 @@
 import React from "react"
 import { Link } from "gatsby"
-import headerStyles from "./header.module.css"
+import * as headerStyles from "./header.module.css"
 
-export default () => (
+const Header = () => (
     <div className={headerStyles.header}>
         <header>
             <h1>Alan Ribeiro Mól</h1>
@@ -30,3 +30,4 @@ export default () => (
         </div>
     </div>
 )
+export default Header;

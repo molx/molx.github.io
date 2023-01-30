@@ -1,7 +1,7 @@
 import React from "react"
 import Layout from "../components/layout"
 
-export default ({ data }) => {
+const Agua = ({ data }) => {
     return (
         <div>
             <Layout>
@@ -14,3 +14,4 @@ export default ({ data }) => {
         </div>
     )
 }
+export default Agua;

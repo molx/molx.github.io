@@ -2,13 +2,13 @@ import React from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import Projlink from "../components/projlink"
-import SEO from "../components/SEO"
+import Seo from "../components/SEO"
 
-export default ({ data }) => {
+const Projetos = ({ data }) => {
     return (
         <div>
             <Layout>
-                <SEO title={"Projetos"} />
+                <Seo title={"Projetos"} />
                 <h2>Projetos</h2>
                 <p>
                     Sempre gostei de me aventurar no mundo da computação, e aos trancos e barrancos fui aprendendo
@@ -24,7 +24,7 @@ export default ({ data }) => {
         </div>
     )
 }
-
+export default Projetos;
 export const query = graphql`
     query {
         allProjetosCsv {

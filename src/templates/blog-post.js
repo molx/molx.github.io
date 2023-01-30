@@ -1,9 +1,9 @@
 import React from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
-import postStyles from "./blog-post.module.css"
+import * as postStyles from "./blog-post.module.css"
 
-export default ({ data }) => {
+const blogPost = ({ data }) => {
     const post = data.markdownRemark
     return (
         <Layout>
@@ -17,7 +17,7 @@ export default ({ data }) => {
         </Layout>
     )
 }
-
+export default blogPost;
 export const query = graphql`
     query($slug: String!) {
         markdownRemark(fields: { slug: { eq: $slug } }) {

@@ -1,7 +1,7 @@
 import React from "react"
 import Layout from "../components/layout"
 
-export default ({ data }) => {
+const NotFound = ({ data }) => {
     console.log(data)
     return (
         <div>
@@ -12,3 +12,4 @@ export default ({ data }) => {
         </div>
     )
 }
+export default NotFound;

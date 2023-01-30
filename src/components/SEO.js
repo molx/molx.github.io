@@ -54,7 +54,7 @@ const SEO = ({ title, description, image, type }) => {
     )
 }
 
-export default SEO
+export default SEO;
 
 SEO.propTypes = {
     title: PropTypes.string,

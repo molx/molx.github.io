@@ -1,13 +1,13 @@
 import React from "react"
 import { Helmet } from "react-helmet"
 import Header from "../components/header"
-import SEO from "../components/SEO"
+import Seo from "../components/SEO"
 
 /* import layoutStyles from "./layout.module.css" */
 
-export default ({ children }) => (
+const Layout = ({ children }) => (
     <div className={"site"}>
-        <SEO />
+        <Seo />
         <Helmet>
             <meta charset="utf-8" />
             <html lang="pt" />
@@ -20,3 +20,4 @@ export default ({ children }) => (
         <footer></footer>
     </div>
 )
+export default Layout;
