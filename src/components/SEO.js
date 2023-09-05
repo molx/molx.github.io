@@ -17,7 +17,7 @@ const SEO = ({ title, description, image, type }) => {
     } = site.siteMetadata
 
     const seo = {
-        title: title || defaultTitle,
+        title: "Alan Mól" || defaultTitle,
         description: description || defaultDescription,
         image: `${siteUrl}${image || defaultImage}`,
         url: `${siteUrl}${pathname}`,

@@ -11,12 +11,12 @@ const Header = () => (
             <div className={headerStyles.nav}>
                 <div>
                     <Link to="/" activeClassName={headerStyles.active}>
-                        Sobre
+                        About
                     </Link>
                 </div>
                 <div>
                     <Link to="/projetos" activeClassName={headerStyles.active}>
-                        Projetos
+                        Projects
                     </Link>
                 </div>
                 <div>

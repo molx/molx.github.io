@@ -13,11 +13,14 @@ const Index = ({ data }) => {
                 style={{ float: "right", width: "15%", margin: "0 0 10px 2%", minWidth: "100px" }}
             />
             <p>
-                Me formei em Química pela Universidade de Brasília em 2010, e em 2015 concluí meu mestrado em Química
-                Analítica. Além disso, desde 2013 sou servidor público também da Universidade de Brasília, trabalhando
-                como Químico. Entre 2013 e 2015, trabalhei no laboratório de Química do Solo da Faculdade de Agronomia e
-                Medicina Veterinária e desde 2016 estou na Central Analítica do Instituto de Química, onde trabalho
-                principalmente com cromatografia e espetrometria de massas.
+                I graduated in Chemistry by the University of Brasília in 2010 and completed my Masters Degree in Analytical Chemistry in 2015.
+                Since 2013 I work also at the University of Brasília as a Chemist in the Analytics Central of the Chemistry Institute,
+                mainly working with Chromatrography and Mass Spectrometry.
+            </p>
+            <p>
+                Besides being a chemist, I also have a passion for computers and programming. I'm often involved in one or more projects
+                in that area, some of them personal, some of them within communities. Over the past years I have been particularly
+                engaged with Wikis built with MediaWiki.  
             </p>
             <div className={"projparent"} style={{ clear: "both" }}>
                 {data.allPerfisCsv.nodes.map(proj => (

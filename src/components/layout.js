@@ -21,7 +21,7 @@ export function Head() {
         <>
             <meta charset="utf-8" />
             <html lang="pt" />
-            <link rel="canonical" href="http://alanmol.com.br/" />
+            <link rel="canonical" href="http://alanmol.com.br/" />            
         </>
     )
 }

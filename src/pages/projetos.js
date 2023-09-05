@@ -11,9 +11,9 @@ const Projetos = ({ data }) => {
                 <Seo title={"Projetos"} />
                 <h2>Projetos</h2>
                 <p>
-                    Sempre gostei de me aventurar no mundo da computação, e aos trancos e barrancos fui aprendendo
-                    algumas coisas sobre desenvolvimento. Nesse site, além dos links para meu currículo e alguns perfis,
-                    você vai encontrar também alguns projetos que desenvolvi ao longo destes anos.
+                    I have always enjoyed adventuring myself in the world of programming, and slowly learned
+                    some things about development. Here you can also find the links to some of the projects
+                    I have been involved with over these years.
                 </p>
                 <div className={"projparent"}>
                     {data.allProjetosCsv.nodes.map(proj => (
