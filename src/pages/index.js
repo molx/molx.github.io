@@ -2,20 +2,22 @@ import * as React from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import Projlink from "../components/projlink"
+import Seo from "../components/SEO"
 
 const Index = ({ data }) => {
     return (
         <Layout>
-            <h2>Sobre</h2>
+            <Seo title={"About - Alan Mól"} />
+            <h2>About</h2>
             <img
                 alt="Foto de Alan Mól"
                 src={"img/alanmol.jpg"}
                 style={{ float: "right", width: "15%", margin: "0 0 10px 2%", minWidth: "100px" }}
             />
             <p>
-                I graduated in Chemistry by the University of Brasília in 2010 and completed my Masters Degree in Analytical Chemistry in 2015.
-                Since 2013 I work also at the University of Brasília as a Chemist in the Analytics Central of the Chemistry Institute,
-                mainly working with Chromatrography and Mass Spectrometry.
+                I graduated in chemistry by the University of Brasília, Brazil, in 2010 and completed my master's degree in Analytical Chemistry in 2015.
+                Since 2013 I work also at the University of Brasília as a chemist, currently at the Analytical Central of the Chemistry Institute,
+                mainly working with chromatrography and mass spectrometry.
             </p>
             <p>
                 Besides being a chemist, I also have a passion for computers and programming. I'm often involved in one or more projects

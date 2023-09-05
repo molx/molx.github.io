@@ -1,12 +1,12 @@
 import * as React from "react"
 import Header from "../components/header"
-import Seo from "../components/SEO"
+//import Seo from "../components/SEO"
 
 /* import layoutStyles from "./layout.module.css" */
 
 const Layout = ({ children }) => (
     <div className={"site"}>
-        <Seo />
+        {/*<Seo title={children.title} /> */}
         <Header />
         <div id="main_content">
             <div className={"inner"}>{children}</div>

@@ -8,8 +8,8 @@ const Projetos = ({ data }) => {
     return (
         <div>
             <Layout>
-                <Seo title={"Projetos"} />
-                <h2>Projetos</h2>
+                <Seo title={"Projects - Alan Mól"} />
+                <h2>Projects</h2>
                 <p>
                     I have always enjoyed adventuring myself in the world of programming, and slowly learned
                     some things about development. Here you can also find the links to some of the projects

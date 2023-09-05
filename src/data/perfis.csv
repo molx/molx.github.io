@@ -1,4 +1,6 @@
 img,name,url,desc
-lattes,Currículo Lates,http://lattes.cnpq.br/2223060435426298,"Meu currículo acadêmico."
-researchgate,Research Gate,https://www.researchgate.net/profile/Alan_Mol,"Perfil na rede social-acadêmica."
-stackexchange,Stack Exchange,http://stackexchange.com/users/374150/molx?tab=accounts,"Perfil na rede Stack Exchange, com destaque para o Stack Overflow."
+lattes,Currículo Lates,http://lattes.cnpq.br/2223060435426298,"Academic CV."
+researchgate,Research Gate,https://www.researchgate.net/profile/Alan_Mol,"Social/academic network profile."
+github,Github,https://github.com/molx,"Github profile."
+stackexchange,Stack Exchange,http://stackexchange.com/users/374150/molx?tab=accounts,"Stack Exchange profile."
+

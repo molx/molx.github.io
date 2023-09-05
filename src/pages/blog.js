@@ -8,7 +8,7 @@ const Blog = ({ data }) => {
     return (
         <div>
             <Layout>
-                <Seo title={"Blog"} />
+                <Seo title={"Blog - Alan Mól"} />
                 <h2>Últimos posts</h2>
                 {data.allMarkdownRemark.edges.map(({ node }) => (
                     <div key={node.id} style={{ marginTop: "2em" }}>
