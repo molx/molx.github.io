@@ -21,8 +21,7 @@ const Index = ({ data }) => {
             </p>
             <p>
                 Besides being a chemist, I also have a passion for computers and programming. I'm often involved in one or more projects
-                in that area, some of them personal, some of them within communities. Over the past years I have been particularly
-                engaged with Wikis built with MediaWiki.  
+                in that area, some of them personal, some of them within communities.
             </p>
             <div className={"projparent"} style={{ clear: "both" }}>
                 {data.allPerfisCsv.nodes.map(proj => (
